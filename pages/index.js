@@ -1,65 +1,61 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+/** Create a Frontend for an Existing API
+One final idea would be to create a nice
+interface for an already existing API.
+This will help show that you can both interact
+with external API’s but also create a decent user interface.
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+Some fun ones to choose from:
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+Pokemon API
+Harry Potter API
+Cryptocurrency API
+*/
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+// React imports
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+//Library imports
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+// custom imports
+import Layout from '../Layout/Layout'
+import RenderPokemon from '../Components/RenderPokemon'
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+//functional react component
+const FrontendConcept = ({ types, pokemon }) => {
+    return (
+        <Layout>
+            <RenderPokemon types={types} pokemon={pokemon} />
+        </Layout>
+    )
 }
+
+
+export const getStaticProps = async () => {
+    let types = {}
+    let pokemon = {}
+
+    const url = 'https://pokeapi.co/api/v2/pokemon/'
+
+    await axios.get(url + `?limit=20`).then(response => {
+        pokemon = response.data.results
+    }
+        , (error => {
+            console.log(error)
+        }))
+
+
+    /*await axios('https://pokeapi.co/api/v2/type').then(response => {
+        types = response.data.results
+    }, (error => {
+        console.log("GetTypes: ", error)
+    }))*/
+    return {
+        props: {
+            /*types,*/
+            pokemon
+        }
+    }
+}
+export default FrontendConcept
