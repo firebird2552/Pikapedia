@@ -9,7 +9,6 @@ import Col from 'react-bootstrap/Col'
 //Library imports
 import Card from 'react-bootstrap/Card'
 import axios from 'axios'
-import Link from 'next/link'
 
 // custom imports
 
@@ -93,7 +92,7 @@ const RenderMonster = (props) => {
                 <Card key={id} >
                     <Card.Header style={cardStyle()}>
                         <Card.Title className="text-center">
-                            <NavLink href={`./Pokemon/${monster.name}?number=${id} `} style={{ color: "white" }}>
+                            <NavLink href={`./pokemon/${monster.name}?number=${id} `} style={{ color: "white" }}>
                                 #{id} {monster.name.toUpperCase()}
                             </NavLink>
                         </Card.Title>

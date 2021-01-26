@@ -60,7 +60,7 @@ const RenderMoves = ({ moves }) => {
             const moveNumber = moveUrl[6]
             let moveDetails = []
             moveDetails.push(
-                <ListGroup.Item>
+                <ListGroup.Item key={moveNumber}>
                     <Container>
                         <Row>
                             <Col>{<Card.Subtitle className="text-center">Game</Card.Subtitle>}</Col>
@@ -109,7 +109,7 @@ const RenderMoves = ({ moves }) => {
                                 <Container>
                                     <Row>
                                         <Col className="col-11" className="text-center">
-                                            <NavLink href={`./moves/${move.name}?number=${number}`}>
+                                            <NavLink href={`/move/${move.name}?number=${number}`}>
                                                 <Card.Title>
                                                     {move.name}
                                                 </Card.Title>

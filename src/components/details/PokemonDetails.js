@@ -1,7 +1,6 @@
 
 // React imports
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 
 //Library imports
 import axios from 'axios'
@@ -14,16 +13,44 @@ import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 // custom imports
-import Layout from '../Layout/Layout'
-import RenderMoves from '../Components/details/RenderMoves'
-import RenderEvolution from '../Components/details/RenderEvolutions'
+import RenderMoves from './RenderMoves'
+import RenderEvolution from './RenderEvolutions'
 
 
 //functional react component
-const Pokemon = ({ details }) => {
+const PokemonDetails = (props) => {
+    const [details, setDetails] = useState({})
+    const number = props.location.search.slice(8)
+    const getDetails = async (url) => {
 
-    console.log("Details: ", details)
-    const router = useRouter()
+        let tempDetails = {}
+
+        await axios.get(url).then(response => {
+
+            tempDetails = response.data
+        }
+            , (error => {
+                console.log(error)
+            }))
+        await axios.get(tempDetails.species.url).then(response => {
+
+            tempDetails.species = response.data
+        }
+            , (error => {
+                console.log(error)
+            }))
+        setDetails(tempDetails)
+    }
+
+    useEffect(() => {
+        console.log("props: ", props)
+        console.log("Number:" + number)
+        if (number) {
+            const url = `https://pokeapi.co/api/v2/pokemon/${number}`
+            getDetails(url)
+        }
+    }, [number]);
+
 
     const RenderImages = () => {
         let imageNames = ["front_default", "back_default", "front_shiny", "back_shiny", "front_female", "back_female", "front_shiny_female", "back_shiny_female"]
@@ -31,8 +58,10 @@ const Pokemon = ({ details }) => {
 
         imageNames.map(name => {
 
-            if (details.sprites[name] !== null) {
-                images.push(<Col className="col-12 col-md-3"><Card.Img src={details.sprites[name]} /></Col>)
+            if (details.sprites !== undefined) {
+                if (details.sprites[name] !== null) {
+                    images.push(<Col className="col-12 col-md-3"><Card.Img src={details.sprites[name]} /></Col>)
+                }
             }
 
         })
@@ -42,22 +71,22 @@ const Pokemon = ({ details }) => {
 
 
 
-
+    console.log(details)
 
     return (
-        <Layout>
+        <>
             <Card>
                 <Card.Header>
                     <Container>
                         <Row>
                             <Col>
                                 <Card.Title className="text-center">
-                                    {details !== undefined ? details.name.toUpperCase() : null}
+                                    {details.name !== undefined ? details.name.toUpperCase() : null}
                                 </Card.Title>
                             </Col>
                         </Row>
                         <Row>
-                            {details !== undefined ? details.types.map(({ type }) => {
+                            {details.types !== undefined ? details.types.map(({ type }) => {
                                 return (
                                     <Col>
                                         <Card.Subtitle className="text-center">{type.name.toUpperCase()}</Card.Subtitle>
@@ -71,15 +100,15 @@ const Pokemon = ({ details }) => {
                 <Container><Row>{RenderImages()}</Row></Container>
                 <Card.Body>
                     <Card.Subtitle className="text-center">Evolution</Card.Subtitle>
-                    <hr /><RenderEvolution evolutionChain={details.species.evolution_chain} />
+                    <hr />{details.species !== undefined ? <RenderEvolution evolutionChain={details.species.evolution_chain} /> : <Col>Loading</Col>}
                 </Card.Body>
                 <Card.Body>
                     <Card.Subtitle className="text-center">Base Stats</Card.Subtitle>
                     <hr />
                     <ListGroup variant="flush">
-                        {details.stats.map((stat) => {
+                        {details.stats !== undefined ? details.stats.map((stat) => {
                             return (<ListGroup.Item><Container><Row><Col>{stat.stat.name}</Col><Col>{stat.base_stat}</Col></Row></Container></ListGroup.Item>)
-                        })}
+                        }) : null}
                     </ListGroup>
                 </Card.Body>
                 <Card.Body>
@@ -101,13 +130,13 @@ const Pokemon = ({ details }) => {
 
                 </Card.Body>
             </Card>
-        </Layout>
+        </>
     )
 }
 
 // Evolution Chain -> images -> level -> links
 
-Pokemon.getInitialProps = async ({ query }) => {
+PokemonDetails.getInitialProps = async ({ query }) => {
     const number = query.number
     let details = {}
     if (number) {
@@ -140,4 +169,4 @@ Pokemon.getInitialProps = async ({ query }) => {
     return { details }
 }
 
-export default Pokemon
+export default PokemonDetails

@@ -12,80 +12,34 @@ import Form from 'react-bootstrap/Form'
 import RenderMonster from './RenderMonster'
 
 //functional react component
-const RenderPokemon = (props) => {
-    /*const types = props.types*/
+const PokemonList = (props) => {
 
 
-    // Initializes the state to create a filter for searchs
-    //const [types, setTypes] = useState([])
-    const [pokemon, setPokemon] = useState(props.pokemon)
+    const [pokemon, setPokemon] = useState([])
     const [searchKeyword, setSearchKeyword] = useState("")
     const [displayedPokemon, setDisplayedPokemon] = useState([])
     const [loading, setLoading] = useState(true)
     const [region, setRegion] = useState("")
 
-    useEffect(() => {
+    /**
+     * When the page loads for the first time -> Load the Kanto region pokemon -> display the pokemon once loaded
+     * 
+     * Fix search bar
+     * change region to dropdown
+     * add back in type dropdowns
+     */
 
-        if (pokemon.length < 898) {
-            updatePokemon()
-        } else {
-            setLoading(false)
-        } setRegion("Kanto")
-    }, [pokemon])
 
-    useEffect(() => {
-        setDisplayedPokemon([])
-        displayPokemon()
 
-    }, [pokemon, region, searchKeyword]);
 
-    const updatePokemon = async () => {
-        let tempPokemon = []
-
-        await axios.get(`https://pokeapi.co/api/v2/pokemon/?offset=20&limit=878`).then(response => {
-            tempPokemon = pokemon.concat(response.data.results)
-
-        }
-            , (error => {
-                console.log(error)
-            }))
-        // for (let i = 0; i < tempPokemon.length; i++) {
-
-        //     await axios.get(tempPokemon[i].url).then(response => {
-
-        //         tempPokemon[i] = response.data
-        //     })
-        //     console.log("Pass Number: " + i, "Pokemon: ", tempPokemon)
-        // }
-
-        setPokemon(tempPokemon)
-    }
-
-    const displayPokemon = () => {
-        let tempPokemon = []
-        tempPokemon = filterByRegion()
-        if (searchKeyword.length > 0) {
-            tempPokemon = filterPokemon(tempPokemon)
-        }
-
-        let display = []
-
-        for (let i = 0; i < tempPokemon.length; i++) {
-            let url = tempPokemon[i].url.split('/')
-            let id = url[6]
-            display.push(<RenderMonster id={id} monster={tempPokemon[i]} />)
-        }
-        setDisplayedPokemon(display)
-    }
-
-    const filterPokemon = (pokemonList) => {
+    /* const filterPokemon = (pokemonList) => {
 
         let tempPokemon = pokemonList.filter(monster => {
             if (monster.name.includes(searchKeyword.toLowerCase()))
                 return monster
         })
         return tempPokemon
-    }
+    } */
 
     const filterByRegion = () => {
         let params = {
@@ -137,10 +91,12 @@ const RenderPokemon = (props) => {
                 params.limit = 898
                 params.offset = 0
                 break
+            default:
+                params.limit = 898
+                params.offset = 0
+                break
         }
-
-        let tempPokemon = pokemon.slice(params.offset, params.offset + params.limit)
-        return tempPokemon
+        return params
 
     }
 
@@ -149,11 +105,84 @@ const RenderPokemon = (props) => {
 
     }
 
-    const filterByType = (event) => {
+    /*const filterByType = (event) => {
         console.log("filterByType -> event -> target ->value: ", event.target.value)
+    }*/
+
+
+
+    useEffect(() => {
+        setPokemon([])
+        setLoading(true)
+        let params = filterByRegion()
+        const updatePokemon = async () => {
+            let tempPokemon = []
+
+            await axios.get(`https://pokeapi.co/api/v2/pokemon/?offset=${params.offset}&limit=${params.limit}`).then(response => {
+                tempPokemon = response.data.results
+                setPokemon(tempPokemon)
+
+            }
+                , (error => {
+                    console.log(error)
+                }))
+            // for (let i = 0; i < tempPokemon.length; i++) {
+
+            //     await axios.get(tempPokemon[i].url).then(response => {
+
+            //         tempPokemon[i] = response.data
+            //     })
+            //     console.log("Pass Number: " + i, "Pokemon: ", tempPokemon)
+            // }
+
+            setPokemon(tempPokemon)
+        }
+        updatePokemon()
+    }, [region])
+
+    useEffect(() => {
+        if (pokemon.length > 0) {
+            setLoading(false)
+        }
+        updatedDisplayedPokemon()
+    }, [pokemon])
+
+    useEffect(() => {
+        const checked = document.querySelector('input[type=radio]:checked');
+        console.log(checked.id)
+        setRegion(checked.id)
+    }, []);
+
+    useEffect(() => {
+        updatedDisplayedPokemon()
+
+
+
+    }, [searchKeyword]);
+
+    const updatedDisplayedPokemon = () => {
+        setDisplayedPokemon([])
+
+        let tempPokemon = pokemon
+        if (searchKeyword.length > 0) {
+            tempPokemon = tempPokemon.filter(onePokemon => onePokemon.name.includes(searchKeyword))
+        }
+
+        let display = []
+
+        for (let i = 0; i < tempPokemon.length; i++) {
+            let url = tempPokemon[i].url.split('/')
+            let id = url[6]
+            display.push(<RenderMonster id={id} monster={tempPokemon[i]} />)
+        }
+        if (display.length === 0) {
+            display.push(<Col><h3>No Results</h3></Col>)
+        }
+        setDisplayedPokemon(display)
     }
 
     return (
+
         <Container fluid>
             <Row>
                 <Col>
@@ -201,16 +230,10 @@ const RenderPokemon = (props) => {
                 </Col>
             </Row>
             <Row>
-                {displayedPokemon}{loading ? <Col>Loading...</Col> : null}
+                {loading ? <Col>Loading...</Col> : displayedPokemon}
             </Row>
-        </Container >)
+        </Container >
+
+    )
 }
-
-
-export default RenderPokemon
-
-// Dynamically Load only the pokemon in view
-// Detail pages for each pokemon
-// Filter by type
-// Load all pokemon to filter through the whole list
-// Pageination/Forever scrolling
+export default PokemonList

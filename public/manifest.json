@@ -1,0 +1,8 @@
+{
+  "short_name": "Pikapedia",
+  "name": "Pikapedia",
+  "start_url": "pikapedia.net",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
