@@ -47,52 +47,52 @@ const PokemonList = (props) => {
             "offset": 0
         }
         switch (region) {
-            case "Kanto":
+            case "Generation One - Kanto":
                 params.limit = 151
                 params.offset = 0
                 break
 
-            case "Johto":
+            case "Generation Two - Johto":
                 params.limit = 100
                 params.offset = 151
                 break
 
-            case "Hoenn":
+            case "Generation Three - Hoenn":
                 params.limit = 134
                 params.offset = 251
                 break
 
-            case "Sinnoh":
+            case "Generation Four - Sinnoh":
                 params.limit = 107
                 params.offset = 386
                 break
 
-            case "Unova":
+            case "Generation Five - Unova":
                 params.limit = 155
                 params.offset = 493
                 break
 
-            case "Kalos":
+            case "Generation Six - Kalos":
                 params.limit = 71
                 params.offset = 649
                 break
 
-            case "Alola":
+            case "Generation Seven - Alola":
                 params.limit = 87
                 params.offset = 721
                 break
 
-            case "Galar":
+            case "Generation Eight - Galar":
                 params.limit = 89
                 params.offset = 809
                 break
 
-            case "All":
+            case "All Generations":
                 params.limit = 898
                 params.offset = 0
                 break
             default:
-                params.limit = 898
+                params.limit = 151
                 params.offset = 0
                 break
         }
@@ -101,7 +101,8 @@ const PokemonList = (props) => {
     }
 
     const updateRegion = (event) => {
-        setRegion(event.target.id)
+        const selected = event.target.value
+        setRegion(selected)
 
     }
 
@@ -148,16 +149,12 @@ const PokemonList = (props) => {
     }, [pokemon])
 
     useEffect(() => {
-        const checked = document.querySelector('input[type=radio]:checked');
-        console.log(checked.id)
-        setRegion(checked.id)
+        const selected = document.querySelector('#generationSelect').value;
+        setRegion(selected)
     }, []);
 
     useEffect(() => {
         updatedDisplayedPokemon()
-
-
-
     }, [searchKeyword]);
 
     const updatedDisplayedPokemon = () => {
@@ -193,39 +190,22 @@ const PokemonList = (props) => {
                                 <Form.Control type="text" id="searchBox" onChange={event => setSearchKeyword(event.target.value)} />
 
                             </Form.Group>
-                            {/*types.length !== 0 ?
-                                <Container fluid className="col-12 col-md-6">
-                                    <Row>
-                                        <Form.Group as={Col}>
-                                            <Form.Label>Type One:</Form.Label>
-                                            <Form.Control onChange={event => filterByType(event)} as="select" id="typeOneSelect">
-                                                <option>Any</option>
-                                                {types.map(type => <option>{type.name}</option>)}
-                                            </Form.Control >
-                                        </Form.Group>
-                                        <Form.Group as={Col}>
-                                            <Form.Label>Type Two:</Form.Label>
-                                            <Form.Control onChange={event => filterByType(event)} as="select" id="typeTwoSelect">
-                                                <option>Any</option>
-                                                {types.map(type => <option>{type.name}</option>)}
-                                            </Form.Control>
-                                        </Form.Group>
-                                    </Row>
-                            </Container> : null*/}
+                            <Form.Group as={Col} className="col-12 col-md-3">
+                                <Form.Label>Select a generation/region</Form.Label>
+                                <Form.Control onChange={event => updateRegion(event)} as="select" name="generations" id="generationSelect" defaultValue="Generation One - Kanto">
+                                    <option>Generation One - Kanto</option>
+                                    <option>Generation Two - Johto</option>
+                                    <option>Generation Three - Hoenn</option>
+                                    <option>Generation Four - Sinnoh</option>
+                                    <option>Generation Five - Unova</option>
+                                    <option>Generation Six - Kalos</option>
+                                    <option>Generation Seven - Alola</option>
+                                    <option>Generation Eight - Galar</option>
+                                    <option>All Generations</option>
+                                </Form.Control>
+
+                            </Form.Group>
                         </Form.Row>
-                        <Form.Group>
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="Kanto" type="radio" defaultChecked="true" label="Generation One - Kanto" inline />
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="Johto" type="radio" label="Generation Two - Johto" inline />
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="Hoenn" type="radio" label="Generation Three - Hoenn" inline />
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="Sinnoh" type="radio" label="Generation Four - Sinnoh" inline />
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="Unova" type="radio" label="Generation Five - Unova" inline />
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="Kalos" type="radio" label="Generation Six - Kalos" inline />
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="Alola" type="radio" label="Generation Seven - Alola" inline />
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="Galar" type="radio" label="Generation Eight - Galar" inline />
-                            <Form.Check onChange={event => updateRegion(event)} name="regioSelectionRadios" id="All" type="radio" label="All Generations" inline />
-                        </Form.Group>
-                        <Form.Group>
-                        </Form.Group>
                     </Form>
                 </Col>
             </Row>

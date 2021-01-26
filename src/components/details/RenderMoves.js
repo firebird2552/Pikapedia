@@ -48,7 +48,6 @@ const RenderMoves = ({ moves }) => {
         }
     }, [versionGroups])
 
-    let id = 0
     let moveElements = []
 
 
@@ -75,8 +74,8 @@ const RenderMoves = ({ moves }) => {
                 // check if the version group name matches the name in the 
                 const version = versionGroups.find(version => version.name === name ? version : null)
                 const gameLinks = version.versions.map(game => {
-                    const gameUrl = game.url.split('/')
-                    const gameNumber = gameUrl[6]
+                    /*const gameUrl = game.url.split('/')
+                    //const gameNumber = gameUrl[6]*/
 
                     let items = []
                     items.push(
@@ -98,6 +97,7 @@ const RenderMoves = ({ moves }) => {
                         </Container>
                     </ListGroup.Item>
                 )
+                return 0
             })
             let tempArray = move.url.split('/')
             let number = tempArray[6]
@@ -108,7 +108,7 @@ const RenderMoves = ({ moves }) => {
                             <Card.Header>
                                 <Container>
                                     <Row>
-                                        <Col className="col-11" className="text-center">
+                                        <Col className="col-11 text-center">
                                             <NavLink href={`/move/${move.name}?number=${number}`}>
                                                 <Card.Title>
                                                     {move.name}
@@ -128,6 +128,7 @@ const RenderMoves = ({ moves }) => {
                         </Card>
                     </Accordion>
                 </ListGroup.Item >)
+            return 0
         })
 
     } else { moveElements.push(<Card.Title>Loading...</Card.Title>) }

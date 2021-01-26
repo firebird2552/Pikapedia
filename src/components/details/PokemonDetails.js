@@ -63,7 +63,7 @@ const PokemonDetails = (props) => {
                     images.push(<Col className="col-12 col-md-3"><Card.Img src={details.sprites[name]} /></Col>)
                 }
             }
-
+            return 0
         })
 
         return images
