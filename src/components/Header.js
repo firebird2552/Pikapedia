@@ -15,7 +15,11 @@ import Navbar from 'react-bootstrap/Navbar'
 const Header = () => {
     return (
         <Navbar bg="light">
-            <Navbar.Brand><Link to='/'><img src={Logo} alt="Pikapedia" className="mw-100 h-auto" width="315" height="100" /></Link></Navbar.Brand>
+            <Navbar.Brand>
+                <Link to='/'>
+                    <img src={Logo} alt="Pikapedia" className="mw-100 h-auto" width="315" height="100" />
+                </Link>
+            </Navbar.Brand>
         </Navbar>
     )
 }
