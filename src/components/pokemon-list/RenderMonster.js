@@ -9,47 +9,37 @@ import Col from 'react-bootstrap/Col'
 //Library imports
 import Card from 'react-bootstrap/Card'
 import axios from 'axios'
+import DisplayImages from './DisplayImages'
+import PokemonDetails from '../details/PokemonDetails'
 
 // custom imports
 
 //functional react component
-const RenderMonster = (props) => {
-    const { id, monster } = props
+const RenderMonster = ({ id, monster, details = false }) => {
     const [monsterDetails, setMonsterDetails] = useState([])
     const [loading, setLoading] = useState(true)
-    const [imgLoaded, setImgLoaded] = useState({
-        default: {
-            front: false,
-            back: false,
-        },
-        shiny: {
-            front: false,
-            back: false
-        },
-        female: {
+    const [displayDetails, setDisplayDetails] = useState(details)
 
-            front: false,
-            back: false
-        },
-        shinyFemale: {
-
-            front: false,
-            back: false
-        }
-
-    })
 
     const GetDetails = async () => {
+        let details = {}
         await axios.get(monster.url).then(response => {
-            setMonsterDetails(response.data)
-            setLoading(false)
+            details = response.data
+            axios.get(details.varieties[0].pokemon.url).then(response => {
+                details.varieties[0].pokemon = response.data
+                setLoading(false)
+
+                setMonsterDetails(details)
+            })
         })
+
     }
+
     useEffect(() => {
         GetDetails()
         return () => {
         }
-    })
+    }, [])
     const colors = {
         // from https://www.epidemicjohto.com/t882-type-colors-hex-colors
         "normal": "A8A77A",
@@ -73,7 +63,8 @@ const RenderMonster = (props) => {
     }
 
     const cardStyle = () => {
-        const types = monsterDetails.types.map(type => type.type.name)
+        const types = monsterDetails.varieties !== undefined ? monsterDetails.varieties[0].pokemon.types.map(type => type.type.name) : []
+
         let style
         if (types.length > 1) {
             style = { background: `linear-gradient(to right, #${colors[types[0]]}, #${colors[types[1]]}` }
@@ -86,63 +77,80 @@ const RenderMonster = (props) => {
         return style
     }
 
+    const toggleDisplay = (event) => {
+        console.log(event)
+        setDisplayDetails(!displayDetails)
+    }
+
     const RenderPokemonCard = () => {
         if (!loading) {
-            return (
-                <Col className="col-12 col-md-6 col-lg-4">
-                    <NavLink href={`./pokemon/${monster.name}?number=${id} `} style={{ color: 'inherit' }}>
-                        <Card key={id} >
+            if (displayDetails) {
+                return (
+                    <div>
+                        <NavLink onClick={event => toggleDisplay(event)}>
+                            <Card>
+                                <Card.Header style={cardStyle()}>
+                                    <Card.Title className="text-center text-white">
+                                        #{id} {monster.name.toUpperCase()}
+                                    </Card.Title>
+                                    <Container>
+                                        <Row>{monsterDetails.varieties !== undefined ? monsterDetails.varieties[0].pokemon.types !== undefined ? monsterDetails.varieties[0].pokemon.types.map(type => {
+                                            return (
+                                                <Col>
+                                                    <Card.Subtitle className=" text-white text-center">
+                                                        {type.type.name}
+                                                    </Card.Subtitle>
+                                                </Col>)
+                                        }) : null : null}
+                                        </Row>
+                                    </Container>
+                                </Card.Header>
+                                <Card.Body>
+                                    {!loading ?
+                                        monsterDetails.varieties !== undefined ?
+                                            <DisplayImages monsterDetails={monsterDetails} />
+                                            : null
+                                        : <Card.Text className="text-center">Loading...</Card.Text>}
+                                </Card.Body>
+                                <PokemonDetails details={monsterDetails} />
+
+                            </Card>
+
+                        </NavLink>
+                    </div>
+                )
+            } else {
+                return (
+                    <NavLink onClick={event => toggleDisplay(event)}>
+                        <Card>
                             <Card.Header style={cardStyle()}>
                                 <Card.Title className="text-center text-white">
                                     #{id} {monster.name.toUpperCase()}
                                 </Card.Title>
                                 <Container>
-                                    <Row>{monsterDetails.types !== undefined ? monsterDetails.types.map(type => {
+                                    <Row>{monsterDetails.varieties !== undefined ? monsterDetails.varieties[0].pokemon.types !== undefined ? monsterDetails.varieties[0].pokemon.types.map(type => {
                                         return (
                                             <Col>
                                                 <Card.Subtitle className=" text-white text-center">
                                                     {type.type.name}
                                                 </Card.Subtitle>
                                             </Col>)
-                                    }) : null}
+                                    }) : null : null}
                                     </Row>
                                 </Container>
                             </Card.Header>
                             <Card.Body>
-                                {!loading ? <Container fluid>
-                                    <Row>
-                                        <Col className="d-flex justify-content-center">
-                                            <Card.Subtitle>Standard</Card.Subtitle>
-                                        </Col>
-
-                                        {monsterDetails.sprites.front_shiny !== null ?
-                                            <Col className="d-flex justify-content-center"><Card.Subtitle>Shiny</Card.Subtitle></Col> : null}
-                                    </Row>
-                                    <Row>
-                                        <Col className="d-flex justify-content-center">
-                                            <img onLoad={() => {
-                                                let tempImageLoaded = imgLoaded
-                                                imgLoaded.default.front = true
-                                                setImgLoaded(tempImageLoaded)
-                                            }}
-                                                src={monsterDetails.sprites.front_default}
-                                                className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
-                                        </Col>
-                                        {monsterDetails.sprites.front_shiny !== null ? <Col className="d-flex justify-content-center">
-                                            <img onLoad={() => {
-                                                let tempImageLoaded = imgLoaded
-                                                imgLoaded.shiny.front = true
-                                                setImgLoaded(tempImageLoaded)
-                                            }} src={monsterDetails.sprites.front_shiny} className={imgLoaded.shiny.front ? "" : "d-none"} alt={`Shiny apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.shiny.front ? "d-none" : ""}>Loading...</Card.Title>
-                                        </Col> : null}
-                                    </Row>
-                                </Container>
+                                {!loading ?
+                                    monsterDetails.varieties !== undefined ?
+                                        <DisplayImages monsterDetails={monsterDetails} />
+                                        : null
                                     : <Card.Text className="text-center">Loading...</Card.Text>}
                             </Card.Body>
 
                         </Card>
                     </NavLink>
-                </Col >)
+                )
+            }
         } else {
             return null
         }

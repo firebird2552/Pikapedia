@@ -10,16 +10,15 @@ import Form from 'react-bootstrap/Form'
 
 // custom imports
 import RenderMonster from './RenderMonster'
+import { CardColumns, CardDeck } from 'react-bootstrap'
 
 //functional react component
 const PokemonList = (props) => {
-
-
     const [pokemon, setPokemon] = useState([])
     const [searchKeyword, setSearchKeyword] = useState("")
     const [displayedPokemon, setDisplayedPokemon] = useState([])
     const [loading, setLoading] = useState(true)
-    const [region, setRegion] = useState("")
+    const [region, setRegion] = useState(1)
 
     /**
      * When the page loads for the first time -> Load the Kanto region pokemon -> display the pokemon once loaded
@@ -29,71 +28,46 @@ const PokemonList = (props) => {
      * add back in type dropdowns
      */
 
-
-
-
-    /* const filterPokemon = (pokemonList) => {
-
-        let tempPokemon = pokemonList.filter(monster => {
-            if (monster.name.includes(searchKeyword.toLowerCase()))
-                return monster
-        })
-        return tempPokemon
-    } */
-
     const filterByRegion = () => {
-        let params = {
-            "limit": 151,
-            "offset": 0
-        }
+        let params = 1
         switch (region) {
             case "Generation One - Kanto":
-                params.limit = 151
-                params.offset = 0
+                params = 2
                 break
 
             case "Generation Two - Johto":
-                params.limit = 100
-                params.offset = 151
+                params = 3
                 break
 
             case "Generation Three - Hoenn":
-                params.limit = 134
-                params.offset = 251
+                params = 4
                 break
 
             case "Generation Four - Sinnoh":
-                params.limit = 107
-                params.offset = 386
+                params = 5
                 break
 
             case "Generation Five - Unova":
-                params.limit = 155
-                params.offset = 493
+                params = 6
                 break
 
             case "Generation Six - Kalos":
-                params.limit = 71
-                params.offset = 649
+                params = 7
                 break
 
             case "Generation Seven - Alola":
-                params.limit = 87
-                params.offset = 721
+                params = 8
                 break
 
             case "Generation Eight - Galar":
-                params.limit = 89
-                params.offset = 809
+                params = 9
                 break
 
             case "All Generations":
-                params.limit = 898
-                params.offset = 0
+                params = 1
                 break
             default:
-                params.limit = 151
-                params.offset = 0
+                params = 2
                 break
         }
         return params
@@ -106,12 +80,6 @@ const PokemonList = (props) => {
 
     }
 
-    /*const filterByType = (event) => {
-        console.log("filterByType -> event -> target ->value: ", event.target.value)
-    }*/
-
-
-
     useEffect(() => {
         setPokemon([])
         setLoading(true)
@@ -119,22 +87,14 @@ const PokemonList = (props) => {
         const updatePokemon = async () => {
             let tempPokemon = []
 
-            await axios.get(`https://pokeapi.co/api/v2/pokemon/?offset=${params.offset}&limit=${params.limit}`).then(response => {
-                tempPokemon = response.data.results
+            await axios.get(`https://pokeapi.co/api/v2/pokedex/${params}/`).then(response => {
+                tempPokemon = response.data.pokemon_entries
                 setPokemon(tempPokemon)
 
             }
                 , (error => {
                     console.log(error)
                 }))
-            // for (let i = 0; i < tempPokemon.length; i++) {
-
-            //     await axios.get(tempPokemon[i].url).then(response => {
-
-            //         tempPokemon[i] = response.data
-            //     })
-            //     console.log("Pass Number: " + i, "Pokemon: ", tempPokemon)
-            // }
 
             setPokemon(tempPokemon)
         }
@@ -144,12 +104,13 @@ const PokemonList = (props) => {
     useEffect(() => {
         if (pokemon.length > 0) {
             setLoading(false)
+            updatedDisplayedPokemon()
         }
-        updatedDisplayedPokemon()
     }, [pokemon])
 
     useEffect(() => {
-        const selected = document.querySelector('#generationSelect').value;
+        let generationSelector = document.querySelector('#generationSelect')
+        const selected = generationSelector !== null ? generationSelector.value : undefined;
         setRegion(selected)
     }, []);
 
@@ -158,24 +119,19 @@ const PokemonList = (props) => {
     }, [searchKeyword]);
 
     const updatedDisplayedPokemon = () => {
-        console.log("Search Keyword:", searchKeyword)
         setDisplayedPokemon([])
 
         let tempPokemon = []
         let display = []
 
         tempPokemon = searchKeyword.length > 0 ? pokemon.filter(onePokemon => onePokemon.name.includes(searchKeyword.toLowerCase())) : pokemon
-        console.log("Temp Pokemon", tempPokemon)
         if (tempPokemon.length > 0) {
             for (let i = 0; i < tempPokemon.length; i++) {
-                let url = tempPokemon[i].url.split('/')
-                let id = url[6]
-                display.push(<RenderMonster id={id} monster={tempPokemon[i]} />)
+                display.push(<RenderMonster id={tempPokemon[i].entry_number} monster={tempPokemon[i].pokemon_species} />)
             }
         } else {
             display.push(<Col><h3>No Results</h3></Col>)
         }
-        console.log("Display:", display)
 
         setDisplayedPokemon(display)
     }
@@ -191,7 +147,7 @@ const PokemonList = (props) => {
                                 <Form.Control type="text" id="searchBox" onChange={event => setSearchKeyword(event.target.value)} />
 
                             </Form.Group>
-                            <Form.Group as={Col} className="col-12 col-md-3">
+                            {props.games === undefined ? <Form.Group as={Col} className="col-12 col-md-3">
                                 <Form.Label>Select a generation/region</Form.Label>
                                 <Form.Control onChange={event => updateRegion(event)} as="select" name="generations" id="generationSelect" defaultValue="Generation One - Kanto">
                                     <option>Generation One - Kanto</option>
@@ -205,14 +161,14 @@ const PokemonList = (props) => {
                                     <option>All Generations</option>
                                 </Form.Control>
 
-                            </Form.Group>
+                            </Form.Group> : null}
                         </Form.Row>
                     </Form>
                 </Col>
             </Row>
-            <Row>
+            <CardColumns as={Row} className="justify-content-center">
                 {loading ? <Col>Loading...</Col> : displayedPokemon}
-            </Row>
+            </CardColumns>
         </Container >
 
     )

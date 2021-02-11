@@ -21,7 +21,7 @@ const Header = () => {
                     <img src={Logo} alt="Pikapedia" className="mw-100 h-auto" width="315" height="100" />
                 </Link>
                 <Nav>
-                    <Link to="Version1">Red/Blue</Link>
+                    <Nav.Link href="/Version1">Red/Blue</Nav.Link>
                 </Nav>
             </Navbar.Brand>
         </Navbar>

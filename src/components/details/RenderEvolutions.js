@@ -67,89 +67,73 @@ const RenderEvolution = ({ evolutionChain }) => {
     if (!loading) {
         let evolutionItems = () => {
             let firstEvo = (
-                <Col className="col-12 col-md-2">
-                    <Card>
-                        <Card.Header>
-                            <Card.Subtitle className="text-center text-uppercase">
-                                {evolutionList.species.name}
-                            </Card.Subtitle>
-                        </Card.Header>
-                        <Card.Img src={evolutionList.species.sprites.front_default} />
-                        <Card.Body>
-                            <Card.Text className="text-center">
-                                Level
+                <Card>
+                    <Card.Header>
+                        <Card.Subtitle className="text-center text-uppercase">
+                            {evolutionList.species.name}
+                        </Card.Subtitle>
+                    </Card.Header>
+                    <Card.Img src={evolutionList.species.sprites.front_default} />
+                    <Card.Body>
+                        <Card.Text className="text-center">
+                            Level
                             </Card.Text>
-                            <Card.Text>
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col >)
+                        <Card.Text className="text-center">
+                            {evolutionList.evolves_to[0].evolution_details[0].min_level}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>)
 
             let secondEvo = []
             let thirdEvo = []
             for (let evo = 0; evo < evolutionList.evolves_to.length; evo++) {
 
                 const evolvesTo = evolutionList.evolves_to[evo]
+                console.log(evolvesTo)
                 secondEvo.push(
-                    <Col className="col-12 col-md-2">
-                        <Card>
-                            <Card.Header>
-                                <Card.Subtitle className="text-center text-uppercase">
-                                    {evolvesTo.species.name}
-                                </Card.Subtitle>
-                            </Card.Header>
-                            <Card.Img src={evolvesTo.species.sprites.front_default} />
-                            <Card.Body>
-                                <Card.Text className="text-center">
-                                    Level
-                        </Card.Text>
-                                <Card.Text>
+                    <Card>
+                        <Card.Header>
+                            <Card.Subtitle className="text-center text-uppercase">
+                                {evolvesTo.species.name}
+                            </Card.Subtitle>
+                        </Card.Header>
+                        <Card.Img src={evolvesTo.species.sprites.front_default} />
+                        <Card.Body>
+                            <Card.Text className="text-center">
+                                Level
                                 </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col >
+                            <Card.Text className="text-center">
+                                {evolvesTo.evolves_to[0].evolution_details[0].min_level}
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
                 )
                 for (let evoTwo = 0; evoTwo < evolvesTo.evolves_to.length; evoTwo++) {
                     thirdEvo.push(
-                        <Col className="col-12 col-md-2">
-                            <Card>
-                                <Card.Header>
-                                    <Card.Subtitle className="text-center text-uppercase">
-                                        {evolvesTo.evolves_to[evoTwo].species.name}
-                                    </Card.Subtitle>
-                                </Card.Header>
-                                <Card.Img src={evolvesTo.evolves_to[evoTwo].species.sprites.front_default} />
-                                <Card.Body>
-                                    <Card.Text className="text-center">
-                                        Level
-                            </Card.Text>
-                                    <Card.Text>
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col >
+                        <Card>
+                            <Card.Header>
+                                <Card.Subtitle className="text-center text-uppercase">
+                                    {evolvesTo.evolves_to[evoTwo].species.name}
+                                </Card.Subtitle>
+                            </Card.Header>
+                            <Card.Img src={evolvesTo.evolves_to[evoTwo].species.sprites.front_default} />
+                            <Card.Body>
+                            </Card.Body>
+                        </Card>
                     )
                 }
             }
-            let evoList = (
-                <Container fluid>
-                    <Row className="justify-content-center">
-                        {firstEvo}
-                        {secondEvo}
-
-                        {thirdEvo}
-                    </Row>
-                </Container>)
+            let evoList = []
+            evoList.push(firstEvo)
+            evoList.push(secondEvo)
+            evoList.push(thirdEvo)
 
 
             return evoList
         }
 
-        evolutions.push(
-            <ListGroup.Item>
-                {evolutionItems()}
-            </ListGroup.Item>)
-    } else { evolutions.push(<Card.Title className="text-center">Loading...</Card.Title>) }
+        evolutions = evolutionItems()
+    } else { evolutions = <Card.Title className="text-center">Loading...</Card.Title> }
 
     return evolutions
 
