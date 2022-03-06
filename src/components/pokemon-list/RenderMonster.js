@@ -1,6 +1,5 @@
 // React imports
 import React, { useState, useEffect } from 'react'
-import NavLink from 'react-bootstrap/NavLink'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -8,29 +7,23 @@ import Col from 'react-bootstrap/Col'
 
 //Library imports
 import Card from 'react-bootstrap/Card'
-import axios from 'axios'
 import DisplayImages from './DisplayImages'
-import PokemonDetails from '../details/PokemonDetails'
+import { GetPokemonDetails } from '../../api/GetPokemon'
 
 // custom imports
 
 //functional react component
 const RenderMonster = ({ id, monster, details = false }) => {
-    const [monsterDetails, setMonsterDetails] = useState([])
+    const [pokemon, setPokemon] = useState(monster)
     const [loading, setLoading] = useState(true)
-    const [displayDetails, setDisplayDetails] = useState(details)
+
 
 
     const GetDetails = async () => {
-        let details = {}
-        await axios.get(monster.url).then(response => {
-            details = response.data
-            axios.get(details.varieties[0].pokemon.url).then(response => {
-                details.varieties[0].pokemon = response.data
-                setLoading(false)
+        await GetPokemonDetails(pokemon).then(result => {
+            setPokemon(result)
+            setLoading(false)
 
-                setMonsterDetails(details)
-            })
         })
 
     }
@@ -40,6 +33,7 @@ const RenderMonster = ({ id, monster, details = false }) => {
         return () => {
         }
     }, [])
+
     const colors = {
         // from https://www.epidemicjohto.com/t882-type-colors-hex-colors
         "normal": "A8A77A",
@@ -63,7 +57,9 @@ const RenderMonster = ({ id, monster, details = false }) => {
     }
 
     const cardStyle = () => {
-        const types = monsterDetails.varieties !== undefined ? monsterDetails.varieties[0].pokemon.types.map(type => type.type.name) : []
+        // console.log("Pikapedia.net -> pokemon.varieties.pokemon", pokemon.varieties[0].pokemon)
+        // console.log("Pikapedia.net -> pokemon.varieties.pokemon.types", pokemon.varieties[0].pokemon.types)
+        const types = pokemon.varieties !== undefined ? pokemon.varieties[0].pokemon.types.map(type => type.type.name) : []
 
         let style
         if (types.length > 1) {
@@ -77,85 +73,49 @@ const RenderMonster = ({ id, monster, details = false }) => {
         return style
     }
 
-    const toggleDisplay = (event) => {
-        console.log(event)
-        setDisplayDetails(!displayDetails)
-    }
-
     const RenderPokemonCard = () => {
         if (!loading) {
-            if (displayDetails) {
-                return (
-                    <div>
-                        <NavLink onClick={event => toggleDisplay(event)}>
-                            <Card>
-                                <Card.Header style={cardStyle()}>
-                                    <Card.Title className="text-center text-white">
-                                        #{id} {monster.name.toUpperCase()}
-                                    </Card.Title>
-                                    <Container>
-                                        <Row>{monsterDetails.varieties !== undefined ? monsterDetails.varieties[0].pokemon.types !== undefined ? monsterDetails.varieties[0].pokemon.types.map(type => {
-                                            return (
-                                                <Col>
-                                                    <Card.Subtitle className=" text-white text-center">
-                                                        {type.type.name}
-                                                    </Card.Subtitle>
-                                                </Col>)
-                                        }) : null : null}
-                                        </Row>
-                                    </Container>
-                                </Card.Header>
-                                <Card.Body>
-                                    {!loading ?
-                                        monsterDetails.varieties !== undefined ?
-                                            <DisplayImages monsterDetails={monsterDetails} />
-                                            : null
-                                        : <Card.Text className="text-center">Loading...</Card.Text>}
-                                </Card.Body>
-                                <PokemonDetails details={monsterDetails} />
+            return (
+                <Col>
+                    <Card>
+                        <Card.Header style={cardStyle()}>
+                            <Card.Title className="text-center text-white">
+                                #{id} {monster.name.toUpperCase()}
+                            </Card.Title>
+                            <Container>
+                                <Row>{pokemon.varieties !== undefined ? pokemon.varieties[0].pokemon.types !== undefined ? pokemon.varieties[0].pokemon.types.map(type => {
+                                    return (
+                                        <Col>
+                                            <Card.Subtitle className=" text-white text-center">
+                                                {type.type.name}
+                                            </Card.Subtitle>
+                                        </Col>)
+                                }) : null : null}
+                                </Row>
+                            </Container>
+                        </Card.Header>
+                        <Card.Body>
+                            {!loading ?
+                                pokemon.varieties !== undefined ?
+                                    <DisplayImages pokemon={pokemon} />
+                                    : null
+                                : <Card.Text className="text-center">Loading...</Card.Text>}
+                        </Card.Body>
 
-                            </Card>
-
-                        </NavLink>
-                    </div>
-                )
-            } else {
-                return (
-                    <NavLink onClick={event => toggleDisplay(event)}>
-                        <Card>
-                            <Card.Header style={cardStyle()}>
-                                <Card.Title className="text-center text-white">
-                                    #{id} {monster.name.toUpperCase()}
-                                </Card.Title>
-                                <Container>
-                                    <Row>{monsterDetails.varieties !== undefined ? monsterDetails.varieties[0].pokemon.types !== undefined ? monsterDetails.varieties[0].pokemon.types.map(type => {
-                                        return (
-                                            <Col>
-                                                <Card.Subtitle className=" text-white text-center">
-                                                    {type.type.name}
-                                                </Card.Subtitle>
-                                            </Col>)
-                                    }) : null : null}
-                                    </Row>
-                                </Container>
-                            </Card.Header>
-                            <Card.Body>
-                                {!loading ?
-                                    monsterDetails.varieties !== undefined ?
-                                        <DisplayImages monsterDetails={monsterDetails} />
-                                        : null
-                                    : <Card.Text className="text-center">Loading...</Card.Text>}
-                            </Card.Body>
-
-                        </Card>
-                    </NavLink>
-                )
-            }
+                    </Card>
+                </Col>
+            )
         } else {
             return null
         }
     }
 
     return RenderPokemonCard()
+}
+
+export const RenderDetails = () => {
+
+    return (<p>How much wood could a wood chuck norris chuck if a wood chuck norris could chuck your moms wood</p>)
+
 }
 export default RenderMonster

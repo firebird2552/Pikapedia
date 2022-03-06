@@ -15,11 +15,11 @@ import ListGroup from 'react-bootstrap/ListGroup'
 // custom imports
 import RenderMoves from './RenderMoves'
 import RenderEvolution from './RenderEvolutions'
-import { CardColumns, CardGroup } from 'react-bootstrap'
 
 
 //functional react component
 const PokemonDetails = (props) => {
+
     const [details, setDetails] = useState(props.details)
     const number = details.id
     console.log(details)
@@ -51,7 +51,7 @@ const PokemonDetails = (props) => {
                 getDetails(url)
             }
         }
-    }, [number]);
+    }, [number, details]);
 
 
     const RenderImages = () => {

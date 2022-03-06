@@ -1,5 +1,5 @@
 // React imports
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 //Library imports
 import Container from 'react-bootstrap/Container'
@@ -10,11 +10,11 @@ import Card from 'react-bootstrap/Card'
 // custom imports
 
 //functional react component
-const DisplayImages = ({ monsterDetails }) => {
+const DisplayImages = ({ pokemon }) => {
     let sprites = undefined
 
-    if (monsterDetails.varieties !== undefined) {
-        sprites = monsterDetails.varieties[0].pokemon.sprites
+    if (pokemon.varieties !== undefined) {
+        sprites = pokemon.varieties[0].pokemon.sprites
     }
 
     const ImageLoaded = (event) => {
@@ -30,7 +30,7 @@ const DisplayImages = ({ monsterDetails }) => {
                     <Card.Subtitle>Standard</Card.Subtitle>
                 </Col>
 
-                {monsterDetails.length !== 0 ?
+                {pokemon.length !== 0 ?
                     sprites !== undefined ?
                         sprites.front_shiny !== null ?
 
@@ -50,7 +50,7 @@ const DisplayImages = ({ monsterDetails }) => {
                             onLoad={event => ImageLoaded(event)}
                             src={sprites.front_default}
                             className="d-none"
-                            alt={`Default apperance for ${monsterDetails.name}`} />
+                            alt={`Default apperance for ${pokemon.name}`} />
 
                         <Card.Title>Loading...</Card.Title>
                     </Col> : null}
@@ -61,7 +61,7 @@ const DisplayImages = ({ monsterDetails }) => {
                                 onLoad={event => ImageLoaded(event)}
                                 src={sprites.front_shiny}
                                 className={"d-none"}
-                                alt={`The shiny apperance for ${monsterDetails.name}`} />
+                                alt={`The shiny apperance for ${pokemon.name}`} />
                             <Card.Title>Loading...</Card.Title>
                         </Col>
                         : null

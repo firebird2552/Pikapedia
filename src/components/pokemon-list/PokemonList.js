@@ -2,19 +2,19 @@
 import React, { useState, useEffect } from 'react'
 
 //Library imports
-import axios from 'axios'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 
 // custom imports
-import RenderMonster from './RenderMonster'
-import { CardColumns, CardDeck } from 'react-bootstrap'
+import { GetPokemonList } from '../../api/GetPokemon'
+import RenderPokemon from './RenderPokemon'
 
 //functional react component
 const PokemonList = (props) => {
     const [pokemon, setPokemon] = useState([])
+    const [filteredPokemon, setFilteredPokemon] = useState(pokemon)
     const [searchKeyword, setSearchKeyword] = useState("")
     const [displayedPokemon, setDisplayedPokemon] = useState([])
     const [loading, setLoading] = useState(true)
@@ -27,6 +27,9 @@ const PokemonList = (props) => {
      * change region to dropdown
      * add back in type dropdowns
      */
+
+
+
 
     const filterByRegion = () => {
         let params = 1
@@ -84,19 +87,13 @@ const PokemonList = (props) => {
         setPokemon([])
         setLoading(true)
         let params = filterByRegion()
+
         const updatePokemon = async () => {
             let tempPokemon = []
-
-            await axios.get(`https://pokeapi.co/api/v2/pokedex/${params}/`).then(response => {
-                tempPokemon = response.data.pokemon_entries
+            await GetPokemonList(params).then(result => {
+                tempPokemon = result
                 setPokemon(tempPokemon)
-
-            }
-                , (error => {
-                    console.log(error)
-                }))
-
-            setPokemon(tempPokemon)
+            })
         }
         updatePokemon()
     }, [region])
@@ -121,20 +118,21 @@ const PokemonList = (props) => {
     const updatedDisplayedPokemon = () => {
         setDisplayedPokemon([])
 
-        let tempPokemon = []
         let display = []
-
-        tempPokemon = searchKeyword.length > 0 ? pokemon.filter(onePokemon => onePokemon.name.includes(searchKeyword.toLowerCase())) : pokemon
-        if (tempPokemon.length > 0) {
-            for (let i = 0; i < tempPokemon.length; i++) {
-                display.push(<RenderMonster id={tempPokemon[i].entry_number} monster={tempPokemon[i].pokemon_species} />)
+        setFilteredPokemon(searchKeyword.length > 0 ? pokemon.filter(onePokemon => onePokemon.name.includes(searchKeyword.toLowerCase())) : pokemon)
+        if (filteredPokemon.length > 0) {
+            for (let i = 0; i < filteredPokemon.length; i++) {
+                filteredPokemon.displayDetails = false
+                display.push(RenderPokemon(i))
             }
         } else {
             display.push(<Col><h3>No Results</h3></Col>)
         }
-
         setDisplayedPokemon(display)
     }
+
+
+
 
     return (
         <Container fluid>
@@ -166,9 +164,11 @@ const PokemonList = (props) => {
                     </Form>
                 </Col>
             </Row>
-            <CardColumns as={Row} className="justify-content-center">
-                {loading ? <Col>Loading...</Col> : displayedPokemon}
-            </CardColumns>
+            <Container>
+                <Row>
+                    {loading ? <Col>Loading...</Col> : displayedPokemon}
+                </Row>
+            </Container>
         </Container >
 
     )
