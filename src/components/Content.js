@@ -8,15 +8,26 @@ import { Switch, Route } from 'react-router-dom'
 import PokemonList from './pokemon-list/PokemonList'
 import PokemonDetails from './details/PokemonDetails'
 import MoveDetails from './details/moves/MoveDetails'
+import { AdComponent } from './AdComponent'
+import { Footer } from './Footer'
+
+//style imports
+import '../styles/style.css'
 
 //functional react component
 const Content = () => {
     return (
-        <Switch>
-            <Route exact path='/' component={PokemonList} />
-            <Route exact path="/pokemon/:pokemonName" component={PokemonDetails} />
-            <Route exact path="/move/:moveName" component={MoveDetails} />
-        </Switch>
+        <div>
+            <div className="content">
+                <Switch>
+                    <Route exact path='/' component={PokemonList} />
+                    <Route exact path="/pokemon/:pokemonName" component={PokemonDetails} />
+                    <Route exact path="/move/:moveName" component={MoveDetails} />
+                </Switch>
+                <AdComponent />
+            </div>
+            <Footer />
+        </div>
     )
 }
 export default Content

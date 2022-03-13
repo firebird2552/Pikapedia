@@ -8,12 +8,14 @@ import Col from 'react-bootstrap/Col'
 
 //Library imports
 import Card from 'react-bootstrap/Card'
-import axios from 'axios'
 
 // custom imports
+import { getPokemonData } from '../../data/RetrievePokemon'
+import '../../styles/PokemonCard.css'
 
 //functional react component
 const RenderMonster = (props) => {
+    // console.log(props)
     const { id, monster } = props
     const [monsterDetails, setMonsterDetails] = useState([])
     const [loading, setLoading] = useState(true)
@@ -39,17 +41,19 @@ const RenderMonster = (props) => {
 
     })
 
+
+
     const GetDetails = async () => {
-        await axios.get(monster.url).then(response => {
-            setMonsterDetails(response.data)
-            setLoading(false)
-        })
+
+        setMonsterDetails(await getPokemonData(monster["url"]))
+        console.log("Monster Detials: ", monsterDetails)
+        setLoading(false)
+        // })
     }
     useEffect(() => {
+        console.log("Monster:", monster)
         GetDetails()
-        return () => {
-        }
-    })
+    }, [])
     const colors = {
         // from https://www.epidemicjohto.com/t882-type-colors-hex-colors
         "normal": "A8A77A",
@@ -89,6 +93,7 @@ const RenderMonster = (props) => {
     const RenderPokemonCard = () => {
         if (!loading) {
             return (
+                
                 <Col className="col-12 col-md-6 col-lg-4">
                     <NavLink href={`./pokemon/${monster.name}?number=${id} `} style={{ color: 'inherit' }}>
                         <Card key={id} >
@@ -110,14 +115,14 @@ const RenderMonster = (props) => {
                             </Card.Header>
                             <Card.Body>
                                 {!loading ? <Container fluid>
-                                    <Row>
+                                    {/* <Row>
                                         <Col className="d-flex justify-content-center">
                                             <Card.Subtitle>Standard</Card.Subtitle>
                                         </Col>
 
-                                        {monsterDetails.sprites.front_shiny !== null ?
+                                        {monsterDetails["sprites"].front_shiny !== null ?
                                             <Col className="d-flex justify-content-center"><Card.Subtitle>Shiny</Card.Subtitle></Col> : null}
-                                    </Row>
+                                    </Row> */}
                                     <Row>
                                         <Col className="d-flex justify-content-center">
                                             <img onLoad={() => {
@@ -125,16 +130,16 @@ const RenderMonster = (props) => {
                                                 imgLoaded.default.front = true
                                                 setImgLoaded(tempImageLoaded)
                                             }}
-                                                src={monsterDetails.sprites.front_default}
+                                                src={monsterDetails["sprites"]["other"]["official-artwork"]["front_default"]}
                                                 className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
                                         </Col>
-                                        {monsterDetails.sprites.front_shiny !== null ? <Col className="d-flex justify-content-center">
+                                        {/* {monsterDetails.sprites.front_shiny !== null ? <Col className="d-flex justify-content-center">
                                             <img onLoad={() => {
                                                 let tempImageLoaded = imgLoaded
                                                 imgLoaded.shiny.front = true
                                                 setImgLoaded(tempImageLoaded)
                                             }} src={monsterDetails.sprites.front_shiny} className={imgLoaded.shiny.front ? "" : "d-none"} alt={`Shiny apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.shiny.front ? "d-none" : ""}>Loading...</Card.Title>
-                                        </Col> : null}
+                                        </Col> : null} */}
                                     </Row>
                                 </Container>
                                     : <Card.Text className="text-center">Loading...</Card.Text>}
@@ -144,7 +149,20 @@ const RenderMonster = (props) => {
                     </NavLink>
                 </Col >)
         } else {
-            return null
+            return (
+                <Col className="col-12 col-md-6 col-lg-4">
+                    <NavLink href={`./pokemon/${monster.name}?number=${id} `} style={{ color: 'inherit' }}>
+                        <Card key={id} >
+                            <Card.Header>
+                                <Card.Title className="text-center">
+                                    #{id} {monster.name.toUpperCase()}
+                                </Card.Title>
+                            </Card.Header>
+                            <Card.Body><div>...Loading</div></Card.Body>
+
+                        </Card>
+                    </NavLink>
+                </Col >)
         }
     }
 

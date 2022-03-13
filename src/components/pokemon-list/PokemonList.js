@@ -10,6 +10,8 @@ import Form from 'react-bootstrap/Form'
 
 // custom imports
 import RenderMonster from './RenderMonster'
+import { getPokemon, getPokemonData } from '../../data/RetrievePokemon'
+import RenderOnePokemon from './RenderOnePokemon'
 
 //functional react component
 const PokemonList = (props) => {
@@ -20,6 +22,7 @@ const PokemonList = (props) => {
     const [displayedPokemon, setDisplayedPokemon] = useState([])
     const [loading, setLoading] = useState(true)
     const [region, setRegion] = useState("")
+
 
     /**
      * When the page loads for the first time -> Load the Kanto region pokemon -> display the pokemon once loaded
@@ -113,13 +116,32 @@ const PokemonList = (props) => {
 
 
     useEffect(() => {
+
         setPokemon([])
         setLoading(true)
         let params = filterByRegion()
         const updatePokemon = async () => {
             let tempPokemon = []
 
-            await axios.get(`https://pokeapi.co/api/v2/pokemon/?offset=${params.offset}&limit=${params.limit}`).then(response => {
+            /*
+             * Determine if the pokeapi has already been saved 
+             * if it has do not download a new copy
+             * if it has not
+             *  Download the Kanto portion and then download the other generations.
+             * Determine which generation is currently selected check local storage for it
+             * if it exists load it
+             * if it does not exist download it
+             * Determine if a partial version of the API has been downloaded 
+             * if it has download the rest of it  
+             */
+
+            const pokeapi_url = `https://pokeapi.co/api/v2/pokemon/?offset=${params.offset}&limit=${params.limit}`
+
+            await axios.get(pokeapi_url).then(response => {
+                //console.log('response.data', response.data)
+                localStorage.setItem('pokemon', JSON.stringify(response.data.results))
+                const pokemonStorage = JSON.parse(localStorage.getItem('pokemon'))
+                //console.log("localStorage:", pokemonStorage)
                 tempPokemon = response.data.results
                 setPokemon(tempPokemon)
 
@@ -170,13 +192,32 @@ const PokemonList = (props) => {
         for (let i = 0; i < tempPokemon.length; i++) {
             let url = tempPokemon[i].url.split('/')
             let id = url[6]
-            display.push(<RenderMonster id={id} monster={tempPokemon[i]} />)
+            display.push(<RenderMonster key={id} id={id} monster={tempPokemon[i]} />)
         }
         if (display.length === 0) {
             display.push(<Col><h3>No Results</h3></Col>)
         }
         setDisplayedPokemon(display)
     }
+
+    useEffect(() => {
+        getPokemon().then(async (response) => {
+
+            let pokemon = response
+            let localPokemon = pokemon["Kanto"]
+            for (let index in localPokemon) {
+                localPokemon[index] = await getPokemonData(localPokemon[index]["url"])
+                pokemon["Kanto"] = localPokemon
+
+                // console.log("pokemon:", localPokemon)
+            }
+
+        })
+    }, []);
+
+
+
+
 
     return (
 
@@ -210,6 +251,7 @@ const PokemonList = (props) => {
                 </Col>
             </Row>
             <Row>
+                {/* <RenderOnePokemon pokemon={{ name: "Fordorth" }} /> */}
                 {loading ? <Col>Loading...</Col> : displayedPokemon}
             </Row>
         </Container >
