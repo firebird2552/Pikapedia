@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 
 // custom imports
-import { getPokemonData } from '../../data/RetrievePokemon'
+import { getImages, getPokemonData } from '../../data/RetrievePokemon'
 import '../../styles/PokemonCard.css'
 
 //functional react component
@@ -19,41 +19,36 @@ const RenderMonster = (props) => {
     const { id, monster } = props
     const [monsterDetails, setMonsterDetails] = useState([])
     const [loading, setLoading] = useState(true)
-    const [imgLoaded, setImgLoaded] = useState({
-        default: {
-            front: false,
-            back: false,
-        },
-        shiny: {
-            front: false,
-            back: false
-        },
-        female: {
-
-            front: false,
-            back: false
-        },
-        shinyFemale: {
-
-            front: false,
-            back: false
-        }
-
-    })
+    const [imgLoaded, setImgLoaded] = useState(false)
 
 
 
     const GetDetails = async () => {
 
-        setMonsterDetails(await getPokemonData(monster["url"]))
-        console.log("Monster Detials: ", monsterDetails)
-        setLoading(false)
-        // })
+        getPokemonData(monster["url"]).then((response) => {
+            //console.log("Response: ", response)
+            //console.log("Monster Detials: ", monsterDetails)
+            setMonsterDetails(response)
+            setLoading(false)
+        })
     }
+
+
+
     useEffect(() => {
-        console.log("Monster:", monster)
+        const loadImages = async () => {
+            if (monsterDetails.length === 0) return
+            getImages(monsterDetails["sprites"]["other"]["official-artwork"]["front_default"])
+            setImgLoaded(true)
+        }
+        loadImages()
+    }, [monsterDetails])
+
+    useEffect(() => {
+        //console.log("Monster:", monster)
         GetDetails()
     }, [])
+
     const colors = {
         // from https://www.epidemicjohto.com/t882-type-colors-hex-colors
         "normal": "A8A77A",
@@ -93,7 +88,6 @@ const RenderMonster = (props) => {
     const RenderPokemonCard = () => {
         if (!loading) {
             return (
-                
                 <Col className="col-12 col-md-6 col-lg-4">
                     <NavLink href={`./pokemon/${monster.name}?number=${id} `} style={{ color: 'inherit' }}>
                         <Card key={id} >
@@ -125,13 +119,9 @@ const RenderMonster = (props) => {
                                     </Row> */}
                                     <Row>
                                         <Col className="d-flex justify-content-center">
-                                            <img onLoad={() => {
-                                                let tempImageLoaded = imgLoaded
-                                                imgLoaded.default.front = true
-                                                setImgLoaded(tempImageLoaded)
-                                            }}
+                                            <img
                                                 src={monsterDetails["sprites"]["other"]["official-artwork"]["front_default"]}
-                                                className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
+                                                className={imgLoaded ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded ? "d-none" : ""} loading="lazy">Loading...</Card.Title>
                                         </Col>
                                         {/* {monsterDetails.sprites.front_shiny !== null ? <Col className="d-flex justify-content-center">
                                             <img onLoad={() => {

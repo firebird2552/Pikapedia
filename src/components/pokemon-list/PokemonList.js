@@ -11,7 +11,6 @@ import Form from 'react-bootstrap/Form'
 // custom imports
 import RenderMonster from './RenderMonster'
 import { getPokemon, getPokemonData } from '../../data/RetrievePokemon'
-import RenderOnePokemon from './RenderOnePokemon'
 
 //functional react component
 const PokemonList = (props) => {
