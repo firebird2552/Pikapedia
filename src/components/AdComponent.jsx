@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 
 export const AdComponent = () => {
   useEffect(() => {
-    console.log("useEffect");
     const installGoogleAds = () => {
       const ad_src =
         "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
@@ -14,7 +13,6 @@ export const AdComponent = () => {
     };
     installGoogleAds();
     (window.adsbygoogle = window.adsbygoogle || []).push({});
-    console.log(window.adsbygoogle);
   }, []);
 
   return (

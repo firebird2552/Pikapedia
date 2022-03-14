@@ -2,19 +2,19 @@
 import { setup } from 'axios-cache-adapter'
 /*
  * Structure of local file
-Pokemon = {
-    Kanto = []
-    Johto = []
-    Hoenn = []
-    Sinnoh = []
-    Unova = []
-    Kalos = []
-    Alola = []
-    Galar = []
-}
+ * Pokemon = {
+ *    Kanto = []
+ *    Johto = []
+ *    Hoenn = []
+ *    Sinnoh = []
+ *    Unova = []
+ *    Kalos = []
+ *    Alola = []
+ *    Galar = []
+ *  }
 */
 
-const generation = ["Kanto", "Jhoto", "Hoenn", "Sinnoh", "Unova", "Kalos", "Alola", "Galar"]
+const generation = ["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova", "Kalos", "Alola", "Galar"]
 const api = setup({
     cache: {
         maxAge: 15 * 60 * 1000
@@ -63,14 +63,9 @@ const pokemonGenerations = {
     }
 }
 
-
-export const getImages = async (imageURL) => {
-    return await api.get(imageURL)
-}
-
-const preLoadImages = (imageURL) => {
-    api.get(imageURL)
-
+const preLoadImages = async (imageURL) => {
+    const image = new Image();
+    image.src = imageURL
 }
 
 export const getPokemonData = async (pokemonURL) => {
@@ -143,7 +138,6 @@ const getAllPokemon = async () => {
     pokemon[generation[5]] = await getKalos()
     pokemon[generation[6]] = await getAlola()
     pokemon[generation[7]] = await getGalar()
-    console.log(pokemon)
     return pokemon
 }
 
