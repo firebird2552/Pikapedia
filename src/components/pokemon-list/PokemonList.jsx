@@ -19,45 +19,6 @@ const PokemonList = () => {
   const [loading, setLoading] = useState(true);
   const [region, setRegion] = useState("Kanto");
 
-  useEffect(() => {
-    getPokemon().then(async (response) => {
-      setPokemon(response);
-      let localPokemon = pokemon["Kanto"];
-      for (let index in localPokemon) {
-        localPokemon[index] = await getPokemonData(localPokemon[index]["url"]);
-        pokemon["Kanto"] = localPokemon;
-
-        // console.log("pokemon:", localPokemon)
-      }
-    });
-  }, []);
-
-  const updateRegion = (event) => {
-    const selected = event.target.value;
-    setRegion(selected);
-  };
-
-
-  useEffect(() => {
-    if (Object.keys(pokemon).length !== 0) {
-      updatedDisplayedPokemon();
-      setLoading(false);
-    } else {
-      console.log(
-        `Pokemon not loaded\n pokemon length ${Object.keys(pokemon).length}`
-      );
-    }
-  }, [pokemon]);
-
-  useEffect(() => {
-    const selected = document.querySelector("#generationSelect").value;
-    setRegion(selected);
-  }, []);
-
-  useEffect(() => {
-    updatedDisplayedPokemon();
-  }, [searchKeyword, region]);
-
   const updatedDisplayedPokemon = () => {
     if (searchKeyword.length !== 0) {
       let temp = null;
@@ -82,6 +43,44 @@ const PokemonList = () => {
       setDisplayedPokemon(pokemon);
     }
   };
+
+  useEffect(() => {
+    getPokemon().then(async (response) => {
+      setPokemon(response);
+      let localPokemon = pokemon["Kanto"];
+      for (let index in localPokemon) {
+        localPokemon[index] = await getPokemonData(localPokemon[index]["url"]);
+        pokemon["Kanto"] = localPokemon;
+
+        // console.log("pokemon:", localPokemon)
+      }
+    }, []);
+  }, [pokemon]);
+
+  const updateRegion = (event) => {
+    const selected = event.target.value;
+    setRegion(selected);
+  };
+
+  useEffect(() => {
+    if (Object.keys(pokemon).length !== 0) {
+      updatedDisplayedPokemon();
+      setLoading(false);
+    } else {
+      console.log(
+        `Pokemon not loaded\n pokemon length ${Object.keys(pokemon).length}`
+      );
+    }
+  }, [pokemon]);
+
+  useEffect(() => {
+    const selected = document.querySelector("#generationSelect").value;
+    setRegion(selected);
+  }, []);
+
+  useEffect(() => {
+    updatedDisplayedPokemon();
+  }, [searchKeyword, region]);
 
   return (
     <Container fluid>

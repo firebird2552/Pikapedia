@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { getImages } from "../../data/RetrievePokemon";
-
 export const PokemonImage = (props) => {
   const [imgLoaded, setImageLoaded] = useState(false);
   const [url, setUrl] = useState(props.url);
-  const [image, setImage] = useState(null);
-  let img = document.getElementById(url);
 
 
   useEffect(() => {

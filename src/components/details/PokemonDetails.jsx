@@ -43,8 +43,6 @@ const PokemonDetails = (props) => {
     }
 
     useEffect(() => {
-        console.log("props: ", props)
-        console.log("Number:" + number)
         if (number) {
             const url = `https://pokeapi.co/api/v2/pokemon/${number}`
             getDetails(url)

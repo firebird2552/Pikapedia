@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 //Library imports
 import Card from "react-bootstrap/Card";
@@ -11,6 +11,19 @@ import { PokemonImage } from "./PokemonImage";
 
 export const PokemonCard = ({ loading, monsterDetails, monster }) => {
   const { id, types } = monsterDetails;
+  const [front_defualt, set_front_default] = useState("");
+
+  useEffect(() => {
+    // console.log("Pokemon Card -> useEffect -> monster Details", monsterDetails);
+    if (
+      monsterDetails.length !== 0 &&
+      Object.keys(monsterDetails).length !== 0
+    ) {
+      set_front_default(
+        monsterDetails["sprites"]["other"]["official-artwork"]["front_default"]
+      );
+    }
+  }, [front_defualt, monsterDetails]);
 
   const colors = {
     // from https://www.epidemicjohto.com/t882-type-colors-hex-colors
@@ -65,8 +78,8 @@ export const PokemonCard = ({ loading, monsterDetails, monster }) => {
             <Container>
               <Row>
                 {monsterDetails.types !== undefined
-                                ? types.map(({ type }) => {
-                      const {name} = type
+                  ? types.map(({ type }) => {
+                      const { name } = type;
                       return (
                         <Col key={id + name}>
                           <Card.Subtitle className=" text-white text-center">
@@ -85,11 +98,8 @@ export const PokemonCard = ({ loading, monsterDetails, monster }) => {
                 <Row>
                   <Col className="d-flex justify-content-center">
                     <PokemonImage
-                      url={
-                        monsterDetails["sprites"]["other"]["official-artwork"][
-                          "front_default"
-                        ]
-                      }
+                      key={front_defualt}
+                      url={front_defualt}
                       name={monsterDetails["name"]}
                     />
                   </Col>
