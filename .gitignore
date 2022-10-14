@@ -24,4 +24,5 @@ yarn-error.log*
 
 #old file structure
 /pikapedia.old
+.eslintcache
 pikapedia-flowchart.drawio
