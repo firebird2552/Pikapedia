@@ -170,7 +170,7 @@ const PokemonList = (props) => {
         for (let i = 0; i < tempPokemon.length; i++) {
             let url = tempPokemon[i].url.split('/')
             let id = url[6]
-            display.push(<RenderMonster id={id} monster={tempPokemon[i]} />)
+            display.push(<RenderMonster key={id} id={id} monster={tempPokemon[i]} />)
         }
         if (display.length === 0) {
             display.push(<Col><h3>No Results</h3></Col>)

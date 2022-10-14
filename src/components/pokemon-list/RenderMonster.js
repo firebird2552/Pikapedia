@@ -99,7 +99,7 @@ const RenderMonster = (props) => {
                                 <Container>
                                     <Row>{monsterDetails.types !== undefined ? monsterDetails.types.map(type => {
                                         return (
-                                            <Col>
+                                            <Col key={monster.name + type.type.name}>
                                                 <Card.Subtitle className=" text-white text-center">
                                                     {type.type.name}
                                                 </Card.Subtitle>
@@ -110,21 +110,32 @@ const RenderMonster = (props) => {
                             </Card.Header>
                             <Card.Body>
                                 {!loading ? <Container fluid>
-                                    <Row>
+                                    {/* <Row>
                                         <Col className="d-flex justify-content-center">
                                             <Card.Subtitle>Standard</Card.Subtitle>
                                         </Col>
 
                                         {monsterDetails.sprites.front_shiny !== null ?
                                             <Col className="d-flex justify-content-center"><Card.Subtitle>Shiny</Card.Subtitle></Col> : null}
-                                    </Row>
+                                    </Row> */}
                                     <Row>
                                         <Col className="d-flex justify-content-center">
+                                            <img width="100%" onLoad={() => {
+                                                let tempImageLoaded = imgLoaded
+                                                imgLoaded.default.front = true
+                                                setImgLoaded(tempImageLoaded)
+                                            }}
+
+                                                src={monsterDetails.sprites.other["official-artwork"].front_default}
+                                                className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
+                                        </Col>
+                                        {/* <Col className="d-flex justify-content-center">
                                             <img onLoad={() => {
                                                 let tempImageLoaded = imgLoaded
                                                 imgLoaded.default.front = true
                                                 setImgLoaded(tempImageLoaded)
                                             }}
+
                                                 src={monsterDetails.sprites.front_default}
                                                 className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
                                         </Col>
@@ -134,7 +145,8 @@ const RenderMonster = (props) => {
                                                 imgLoaded.shiny.front = true
                                                 setImgLoaded(tempImageLoaded)
                                             }} src={monsterDetails.sprites.front_shiny} className={imgLoaded.shiny.front ? "" : "d-none"} alt={`Shiny apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.shiny.front ? "d-none" : ""}>Loading...</Card.Title>
-                                        </Col> : null}
+                                        </Col> }
+                                        : null}*/}
                                     </Row>
                                 </Container>
                                     : <Card.Text className="text-center">Loading...</Card.Text>}
