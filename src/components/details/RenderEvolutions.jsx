@@ -100,7 +100,9 @@ const RenderEvolution = ({ evolutionChain }) => {
             <Card>
               <Card.Header>
                 <Card.Subtitle className="text-center text-uppercase">
-                  {`${evolvesTo.evolution_details[0].min_level} ${evolvesTo.species.name}`}
+                  {evolvesTo.evolution_details[0].min_level !== null
+                    ? evolvesTo.evolution_details[0].min_level
+                    : "" + " " + evolvesTo.species.name}
                 </Card.Subtitle>
               </Card.Header>
               <Card.Img src={evolvesTo.species.sprites.front_default} />
@@ -114,7 +116,9 @@ const RenderEvolution = ({ evolutionChain }) => {
               <Card>
                 <Card.Header>
                   <Card.Subtitle className="text-center text-uppercase">
-                    {`${secondEvo.evolution_details[0].min_level} ${secondEvo.species.name}`}
+                    {secondEvo.evolution_details[0].min_level !== null
+                      ? secondEvo.evolution_details[0].min_level
+                      : "" + " " + secondEvo.species.name}
                   </Card.Subtitle>
                 </Card.Header>
                 <Card.Img src={secondEvo.species.sprites.front_default} />
