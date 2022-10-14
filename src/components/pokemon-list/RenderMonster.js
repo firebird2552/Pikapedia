@@ -99,7 +99,7 @@ const RenderMonster = (props) => {
                                 <Container>
                                     <Row>{monsterDetails.types !== undefined ? monsterDetails.types.map(type => {
                                         return (
-                                            <Col>
+                                            <Col key={monster.name + type.type.name}>
                                                 <Card.Subtitle className=" text-white text-center">
                                                     {type.type.name}
                                                 </Card.Subtitle>
@@ -125,6 +125,7 @@ const RenderMonster = (props) => {
                                                 imgLoaded.default.front = true
                                                 setImgLoaded(tempImageLoaded)
                                             }}
+
                                                 src={monsterDetails.sprites.front_default}
                                                 className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
                                         </Col>
