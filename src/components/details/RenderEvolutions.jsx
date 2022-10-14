@@ -75,6 +75,7 @@ const RenderEvolution = ({ evolutionChain }) => {
 
   let evolutions = [];
 
+  console.log(evolutionList);
   if (!loading) {
     let evolutionItems = () => {
       let firstEvo = (
@@ -86,10 +87,6 @@ const RenderEvolution = ({ evolutionChain }) => {
               </Card.Subtitle>
             </Card.Header>
             <Card.Img src={evolutionList.species.sprites.front_default} />
-            <Card.Body>
-              <Card.Text className="text-center">Level</Card.Text>
-              <Card.Text className="text-center">0</Card.Text>
-            </Card.Body>
           </Card>
         </Col>
       );
@@ -103,16 +100,10 @@ const RenderEvolution = ({ evolutionChain }) => {
             <Card>
               <Card.Header>
                 <Card.Subtitle className="text-center text-uppercase">
-                  {evolvesTo.species.name}
+                  {`${evolvesTo.evolution_details[0].min_level} ${evolvesTo.species.name}`}
                 </Card.Subtitle>
               </Card.Header>
               <Card.Img src={evolvesTo.species.sprites.front_default} />
-              <Card.Body>
-                <Card.Text className="text-center">Level</Card.Text>
-                <Card.Text className="text-center">
-                  {evolvesTo.evolution_details[0].min_level}
-                </Card.Text>
-              </Card.Body>
             </Card>
           </Col>
         );
@@ -123,16 +114,10 @@ const RenderEvolution = ({ evolutionChain }) => {
               <Card>
                 <Card.Header>
                   <Card.Subtitle className="text-center text-uppercase">
-                    {secondEvo.species.name}
+                    {`${secondEvo.evolution_details[0].min_level} ${secondEvo.species.name}`}
                   </Card.Subtitle>
                 </Card.Header>
                 <Card.Img src={secondEvo.species.sprites.front_default} />
-                <Card.Body>
-                  <Card.Text className="text-center">Level</Card.Text>
-                  <Card.Text className="text-center">
-                    {secondEvo.evolution_details[0].min_level}
-                  </Card.Text>
-                </Card.Body>
               </Card>
             </Col>
           );
