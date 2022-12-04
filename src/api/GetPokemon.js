@@ -9,13 +9,16 @@ export const GetPokemonList = async (generation) => {
     if (typeof (generation) === Array) {
 
     } else if (typeof (generation) === "number") {
-        await axios.get(`https://pokeapi.co/api/v2/pokedex/${generation}/`)
-            .then(response => {
-                pokemonList = response.data.pokemon_entries
-            }
-                , (error => {
-                    console.log(error)
-                }))
+        console.error(generation)
+        let generationPromise = axios.get(`https://pokeapi.co/api/v2/pokedex/${generation}/`)
+        // .then(response => {
+        //     pokemonList = response.data.pokemon_entries
+        // }
+        //     , (error => {
+        //         console.log(error)
+        //     }))
+        let generationDetails = await generationPromise
+        pokemonList = generationDetails.data.pokemon_entries
 
     }
 
@@ -23,17 +26,28 @@ export const GetPokemonList = async (generation) => {
 }
 
 export const GetPokemonDetails = async (pokemon) => {
-    await axios.get(pokemon.url).then(response => {
-        pokemon = response.data
+    try {
 
-    })
-    await axios.get(pokemon.varieties[0].pokemon.url)
-        .then(response => {
-            pokemon.varieties[0].pokemon = response.data
-        }
-            , (error => {
-                console.log(error)
-            }))
-    return pokemon
+        let pokemonPromise = axios.get(pokemon.url)
+        let pokemonDetails = await pokemonPromise
+        pokemon = pokemonDetails.data
 
+        pokemonPromise = axios.get(pokemon.varieties[0].pokemon.url)
+        // .then(response => {
+        //     pokemon.varieties[0].pokemon = response.data
+        // }
+        //     , (error => {
+        //         console.log(error)
+        //     }))
+
+        pokemonDetails = await pokemonPromise
+        pokemon.varieties[0].pokemon = pokemonDetails.data
+
+        // console.log(`pikapedia.net -> GetPokemonDetails -> pokemon: ${JSON.stringify(pokemon)} \n`)
+    } catch (err) {
+        console.log(err)
+    } finally {
+        return pokemon
+
+    }
 }

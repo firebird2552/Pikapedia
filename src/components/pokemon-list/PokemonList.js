@@ -90,10 +90,12 @@ const PokemonList = (props) => {
 
         const updatePokemon = async () => {
             let tempPokemon = []
-            await GetPokemonList(params).then(result => {
-                tempPokemon = result
-                setPokemon(tempPokemon)
-            })
+            tempPokemon = GetPokemonList(params)
+                .then(result => {
+                    tempPokemon = result
+                    setPokemon(tempPokemon)
+                })
+            setPokemon(tempPokemon)
         }
         updatePokemon()
     }, [region])
@@ -123,7 +125,7 @@ const PokemonList = (props) => {
         if (filteredPokemon.length > 0) {
             for (let i = 0; i < filteredPokemon.length; i++) {
                 filteredPokemon.displayDetails = false
-                display.push(RenderPokemon(i))
+                display.push(RenderPokemon(filteredPokemon[i]))
             }
         } else {
             display.push(<Col><h3>No Results</h3></Col>)

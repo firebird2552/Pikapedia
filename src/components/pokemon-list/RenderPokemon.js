@@ -7,7 +7,7 @@ import NavLink from 'react-bootstrap/NavLink'
 
 
 import RenderMonster from './RenderMonster'
-import { RenderDetails } from './RenderMonster'
+// import { RenderDetails } from './RenderMonster'
 
 
 const toggleDisplay = (pokemon) => {
@@ -17,9 +17,8 @@ const toggleDisplay = (pokemon) => {
 
 /** Render a pokemon without their detail box */
 const RenderOnePokemon = ({ pokemon, id }) => {
-    console.log("Pikapedia.net -> RenderOnePokemon")
     return (
-        <Col className="col-12 col-md-6 col-lg-4">
+        <Col key={pokemon.pokemon_species.name} className="col-12 col-md-6 col-lg-4">
             <NavLink onClick={() => {
                 toggleDisplay(pokemon)
             }}>
@@ -31,13 +30,13 @@ const RenderOnePokemon = ({ pokemon, id }) => {
 
 /** Render a pokemon with their detail box */
 const RenderOnePokemonWithDetails = ({ pokemon, id }) => {
-    console.log("Pikapedia.net -> RenderOnePokemonWithDetails")
+    // console.log(`Pikapedia.net -> RenderOnePokemonWithDetails -> pokemon: ${pokemon}`)
     return (
         <Container>
             <Row>
-                <RenderOnePokemon id={id} />
+                <RenderOnePokemon pokemon={pokemon} id={id} />
                 <Col className="col-12 col-md-6 col-lg-8">
-                    <RenderDetails />
+                    {/* <RenderDetails /> */}
                 </Col>
             </Row>
         </Container>
@@ -51,13 +50,11 @@ const RenderOnePokemonWithDetails = ({ pokemon, id }) => {
  */
 
 const RenderPokemon = (pokemon, id) => {
-    console.log("Pikapedia.net -> RenderPokemon")
     let renderedPokemon
     if (pokemon.displayDetails) {
-        console.log("Pikapedia.net -> RenderPokemon -> with details")
+        // console.log("Pikapedia.net -> RenderPokemon -> with details")
         renderedPokemon = <RenderOnePokemonWithDetails pokemon={pokemon} id={id} />
     } else {
-        console.log("Pikapedia.net -> RenderPokemon -> without details")
         renderedPokemon = <RenderOnePokemon pokemon={pokemon} id={id} />
     }
 

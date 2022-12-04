@@ -57,9 +57,7 @@ const RenderMonster = ({ id, monster, details = false }) => {
     }
 
     const cardStyle = () => {
-        // console.log("Pikapedia.net -> pokemon.varieties.pokemon", pokemon.varieties[0].pokemon)
-        // console.log("Pikapedia.net -> pokemon.varieties.pokemon.types", pokemon.varieties[0].pokemon.types)
-        const types = pokemon.varieties !== undefined ? pokemon.varieties[0].pokemon.types.map(type => type.type.name) : []
+        const types = pokemon.varieties !== undefined ? pokemon.varieties[0].pokemon.types.map(type => (type.type.name)) : []
 
         let style
         if (types.length > 1) {
@@ -85,8 +83,8 @@ const RenderMonster = ({ id, monster, details = false }) => {
                             <Container>
                                 <Row>{pokemon.varieties !== undefined ? pokemon.varieties[0].pokemon.types !== undefined ? pokemon.varieties[0].pokemon.types.map(type => {
                                     return (
-                                        <Col>
-                                            <Card.Subtitle className=" text-white text-center">
+                                        <Col key={type.type.name}>
+                                            <Card.Subtitle className="text-white text-center">
                                                 {type.type.name}
                                             </Card.Subtitle>
                                         </Col>)
