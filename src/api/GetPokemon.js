@@ -18,11 +18,19 @@ export const GetPokemonList = async (generation) => {
         //         console.log(error)
         //     }))
         let generationDetails = await generationPromise
+        // console.log(`api -> GetPokemonList -> Generation: ${generation} - Generation Details: ${JSON.stringify(generationDetails)}`)
         pokemonList = generationDetails.data.pokemon_entries
 
     }
 
     return pokemonList
+}
+const getPokemonImage = async (imageURL) => {
+    let imagePromise = axios.get(imageURL, { responseType: 'arraybuffer' })
+    let localImage = await imagePromise
+    let imageString = Buffer.from(localImage.data, 'binary').toString('base64')
+    return imageString
+    
 }
 
 export const GetPokemonDetails = async (pokemon) => {
@@ -41,6 +49,9 @@ export const GetPokemonDetails = async (pokemon) => {
         //     }))
 
         pokemonDetails = await pokemonPromise
+        let imageURL = pokemonDetails.data.sprites.other['official-artwork'].front_default
+
+        pokemonDetails.data.sprites.other['official-artwork'].front_default = getPokemonImage(imageURL)
         pokemon.varieties[0].pokemon = pokemonDetails.data
 
         // console.log(`pikapedia.net -> GetPokemonDetails -> pokemon: ${JSON.stringify(pokemon)} \n`)

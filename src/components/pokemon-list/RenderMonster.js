@@ -30,8 +30,6 @@ const RenderMonster = ({ id, monster, details = false }) => {
 
     useEffect(() => {
         GetDetails()
-        return () => {
-        }
     }, [])
 
     const colors = {
@@ -94,9 +92,7 @@ const RenderMonster = ({ id, monster, details = false }) => {
                         </Card.Header>
                         <Card.Body>
                             {!loading ?
-                                pokemon.varieties !== undefined ?
                                     <DisplayImages pokemon={pokemon} />
-                                    : null
                                 : <Card.Text className="text-center">Loading...</Card.Text>}
                         </Card.Body>
 

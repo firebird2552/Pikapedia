@@ -73,7 +73,7 @@ const RenderEvolution = ({ evolutionChain }) => {
                     <Card.Body>
                         <Card.Text className="text-center">
                             Level
-                            </Card.Text>
+                        </Card.Text>
                         <Card.Text className="text-center">
                             {evolutionList.evolves_to[0].evolution_details[0].min_level}
                         </Card.Text>
@@ -97,7 +97,7 @@ const RenderEvolution = ({ evolutionChain }) => {
                         <Card.Body>
                             <Card.Text className="text-center">
                                 Level
-                                </Card.Text>
+                            </Card.Text>
                             <Card.Text className="text-center">
                                 {evolvesTo.evolves_to[0].evolution_details[0].min_level}
                             </Card.Text>

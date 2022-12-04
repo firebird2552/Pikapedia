@@ -30,7 +30,6 @@ const RenderOnePokemon = ({ pokemon, id }) => {
 
 /** Render a pokemon with their detail box */
 const RenderOnePokemonWithDetails = ({ pokemon, id }) => {
-    // console.log(`Pikapedia.net -> RenderOnePokemonWithDetails -> pokemon: ${pokemon}`)
     return (
         <Container>
             <Row>
@@ -55,7 +54,7 @@ const RenderPokemon = (pokemon, id) => {
         // console.log("Pikapedia.net -> RenderPokemon -> with details")
         renderedPokemon = <RenderOnePokemonWithDetails pokemon={pokemon} id={id} />
     } else {
-        renderedPokemon = <RenderOnePokemon pokemon={pokemon} id={id} />
+        renderedPokemon = <RenderOnePokemon key={pokemon.pokemon_species.name} pokemon={pokemon} id={id} />
     }
 
     return renderedPokemon
