@@ -72,6 +72,7 @@ const RenderMonster = ({ id, monster, details = false }) => {
     const RenderPokemonCard = () => {
         if (!loading) {
             return (
+<<<<<<< HEAD
                 <Col>
                     <Card>
                         <Card.Header style={cardStyle()}>
@@ -99,6 +100,129 @@ const RenderMonster = ({ id, monster, details = false }) => {
                     </Card>
                 </Col>
             )
+||||||| 1122ae3
+                <Col className="col-12 col-md-6 col-lg-4">
+                    <NavLink href={`./pokemon/${monster.name}?number=${id} `} style={{ color: 'inherit' }}>
+                        <Card key={id} >
+                            <Card.Header style={cardStyle()}>
+                                <Card.Title className="text-center text-white">
+                                    #{id} {monster.name.toUpperCase()}
+                                </Card.Title>
+                                <Container>
+                                    <Row>{monsterDetails.types !== undefined ? monsterDetails.types.map(type => {
+                                        return (
+                                            <Col>
+                                                <Card.Subtitle className=" text-white text-center">
+                                                    {type.type.name}
+                                                </Card.Subtitle>
+                                            </Col>)
+                                    }) : null}
+                                    </Row>
+                                </Container>
+                            </Card.Header>
+                            <Card.Body>
+                                {!loading ? <Container fluid>
+                                    <Row>
+                                        <Col className="d-flex justify-content-center">
+                                            <Card.Subtitle>Standard</Card.Subtitle>
+                                        </Col>
+
+                                        {monsterDetails.sprites.front_shiny !== null ?
+                                            <Col className="d-flex justify-content-center"><Card.Subtitle>Shiny</Card.Subtitle></Col> : null}
+                                    </Row>
+                                    <Row>
+                                        <Col className="d-flex justify-content-center">
+                                            <img onLoad={() => {
+                                                let tempImageLoaded = imgLoaded
+                                                imgLoaded.default.front = true
+                                                setImgLoaded(tempImageLoaded)
+                                            }}
+                                                src={monsterDetails.sprites.front_default}
+                                                className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
+                                        </Col>
+                                        {monsterDetails.sprites.front_shiny !== null ? <Col className="d-flex justify-content-center">
+                                            <img onLoad={() => {
+                                                let tempImageLoaded = imgLoaded
+                                                imgLoaded.shiny.front = true
+                                                setImgLoaded(tempImageLoaded)
+                                            }} src={monsterDetails.sprites.front_shiny} className={imgLoaded.shiny.front ? "" : "d-none"} alt={`Shiny apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.shiny.front ? "d-none" : ""}>Loading...</Card.Title>
+                                        </Col> : null}
+                                    </Row>
+                                </Container>
+                                    : <Card.Text className="text-center">Loading...</Card.Text>}
+                            </Card.Body>
+
+                        </Card>
+                    </NavLink>
+                </Col >)
+=======
+                <Col className="col-12 col-md-6 col-lg-4">
+                    <NavLink href={`./pokemon/${monster.name}?number=${id} `} style={{ color: 'inherit' }}>
+                        <Card key={id} >
+                            <Card.Header style={cardStyle()}>
+                                <Card.Title className="text-center text-white">
+                                    #{id} {monster.name.toUpperCase()}
+                                </Card.Title>
+                                <Container>
+                                    <Row>{monsterDetails.types !== undefined ? monsterDetails.types.map(type => {
+                                        return (
+                                            <Col key={monster.name + type.type.name}>
+                                                <Card.Subtitle className=" text-white text-center">
+                                                    {type.type.name}
+                                                </Card.Subtitle>
+                                            </Col>)
+                                    }) : null}
+                                    </Row>
+                                </Container>
+                            </Card.Header>
+                            <Card.Body>
+                                {!loading ? <Container fluid>
+                                    {/* <Row>
+                                        <Col className="d-flex justify-content-center">
+                                            <Card.Subtitle>Standard</Card.Subtitle>
+                                        </Col>
+
+                                        {monsterDetails.sprites.front_shiny !== null ?
+                                            <Col className="d-flex justify-content-center"><Card.Subtitle>Shiny</Card.Subtitle></Col> : null}
+                                    </Row> */}
+                                    <Row>
+                                        <Col className="d-flex justify-content-center">
+                                            <img width="100%" onLoad={() => {
+                                                let tempImageLoaded = imgLoaded
+                                                imgLoaded.default.front = true
+                                                setImgLoaded(tempImageLoaded)
+                                            }}
+
+                                                src={monsterDetails.sprites.other["official-artwork"].front_default}
+                                                className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
+                                        </Col>
+                                        {/* <Col className="d-flex justify-content-center">
+                                            <img onLoad={() => {
+                                                let tempImageLoaded = imgLoaded
+                                                imgLoaded.default.front = true
+                                                setImgLoaded(tempImageLoaded)
+                                            }}
+
+                                                src={monsterDetails.sprites.front_default}
+                                                className={imgLoaded.default.front ? "" : "d-none"} alt={`Default apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.default.front ? "d-none" : ""}>Loading...</Card.Title>
+                                        </Col>
+                                        {monsterDetails.sprites.front_shiny !== null ? <Col className="d-flex justify-content-center">
+                                            <img onLoad={() => {
+                                                let tempImageLoaded = imgLoaded
+                                                imgLoaded.shiny.front = true
+                                                setImgLoaded(tempImageLoaded)
+                                            }} src={monsterDetails.sprites.front_shiny} className={imgLoaded.shiny.front ? "" : "d-none"} alt={`Shiny apperance for ${monsterDetails.name}`} /> <Card.Title className={imgLoaded.shiny.front ? "d-none" : ""}>Loading...</Card.Title>
+                                        </Col> }
+                                        : null}*/}
+                                    </Row>
+                                </Container>
+                                    : <Card.Text className="text-center">Loading...</Card.Text>}
+                            </Card.Body>
+
+                        </Card>
+                    </NavLink>
+                </Col >)
+>>>>>>> rewrite
         } else {
             return null
         }

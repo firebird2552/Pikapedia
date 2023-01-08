@@ -112,6 +112,30 @@ const PokemonList = (props) => {
 
 
 
+<<<<<<< HEAD
+||||||| 1122ae3
+        for (let i = 0; i < tempPokemon.length; i++) {
+            let url = tempPokemon[i].url.split('/')
+            let id = url[6]
+            display.push(<RenderMonster id={id} monster={tempPokemon[i]} />)
+        }
+        if (display.length === 0) {
+            display.push(<Col><h3>No Results</h3></Col>)
+        }
+        setDisplayedPokemon(display)
+    }
+=======
+        for (let i = 0; i < tempPokemon.length; i++) {
+            let url = tempPokemon[i].url.split('/')
+            let id = url[6]
+            display.push(<RenderMonster key={id} id={id} monster={tempPokemon[i]} />)
+        }
+        if (display.length === 0) {
+            display.push(<Col><h3>No Results</h3></Col>)
+        }
+        setDisplayedPokemon(display)
+    }
+>>>>>>> rewrite
 
     return (
         <Container fluid>
