@@ -19,7 +19,7 @@ import RenderEvolution from './RenderEvolutions'
 
 //functional react component
 const PokemonDetails = (props) => {
-
+console.log(props)
     const [details, setDetails] = useState(props.details)
     const number = details.id
     console.log(details)
