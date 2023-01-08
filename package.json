@@ -44,12 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-<<<<<<< HEAD
   },
   "engines": {
-    "node": ">=16.0.0 <17.0.0"
-||||||| 1122ae3
-=======
+    "node": ">=17.0.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^7.29.4",
@@ -57,6 +54,5 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "yarn-audit-fix": "^9.3.7"
->>>>>>> rewrite
   }
 }
