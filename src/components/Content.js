@@ -14,6 +14,9 @@ const Content = () => {
     return (
         <Switch>
             <Route exact path='/' component={PokemonList} />
+            <Route path='/Version1'>
+                <PokemonList games={["red", "blue"]} />
+            </Route>
             <Route exact path="/pokemon/:pokemonName" component={PokemonDetails} />
             <Route exact path="/move/:moveName" component={MoveDetails} />
         </Switch>

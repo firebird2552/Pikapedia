@@ -20,13 +20,16 @@ const MoveDetails = (props) => {
     const [details, setDetails] = useState({})
 
     const getDetails = async (url) => {
-        await axios.get(url).then(response => {
+        let detailsPromise = axios.get(url)
+        //     .then(response => {
 
-            setDetails(response.data)
-        }
-            , (error => {
-                console.log(error)
-            }))
+        //     setDetails(response.data)
+        // }
+        //     , (error => {
+        //         console.log(error)
+        //     }))
+        let details = await detailsPromise
+        console.log(`Move Details -> get Details -> details: ${details}`)
     }
 
 

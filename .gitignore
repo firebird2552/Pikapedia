@@ -22,5 +22,12 @@ yarn-debug.log*
 yarn-error.log*
 
 #old file structure
+<<<<<<< HEAD
 /pikapedia.old
 pikapedia-flowchart.drawio
+||||||| 8de987a
+/pikapedia.old
+=======
+/pikapedia.old
+.eslintcache
+>>>>>>> 4023b98bc46274104cc4c7f875571fff2b1f7a8b
