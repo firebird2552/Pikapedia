@@ -11,7 +11,7 @@ import { PokemonImage } from "./PokemonImage";
 
 export const PokemonCard = ({ loading, monsterDetails, monster }) => {
   const { id, types } = monsterDetails;
-  console.log(id, types)
+  console.log(id, types);
   const [front_defualt, set_front_default] = useState("");
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export const PokemonCard = ({ loading, monsterDetails, monster }) => {
   if (!loading) {
     return (
       <NavLink
-        href={`./pokemon/${monster.name}$?number=${id}} `}
+        href={`./pokemon/${monster.name}$?number=${id}`}
         style={{ color: "inherit" }}
       >
         <Card key={id}>

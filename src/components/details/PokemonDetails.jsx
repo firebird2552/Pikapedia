@@ -12,10 +12,10 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
 // custom imports
-import RenderMoves from "./RenderMoves";
-import RenderEvolution from "./RenderEvolutions";
+import RenderMoves from "./moves/RenderMoves";
+import RenderEvolution from "./evolutions/RenderEvolutions";
 
-import '../../styles/details.css'
+import "../../styles/details.css";
 
 //functional react component
 const PokemonDetails = (props) => {
@@ -117,7 +117,7 @@ const PokemonDetails = (props) => {
             {details.types !== undefined
               ? details.types.map(({ type }) => {
                   return (
-                    <Col>
+                    <Col key={type}>
                       <Card.Subtitle className="text-center">
                         {type.name.toUpperCase()}
                       </Card.Subtitle>
@@ -131,57 +131,63 @@ const PokemonDetails = (props) => {
       <Card.Body>
         <Container>
           <Row>{RenderImages()}</Row>
-              </Container>
-              <Container>
-                <Row>
-                    <Col>
-        <Card.Subtitle className="text-center title">Evolution</Card.Subtitle>
-          </Col>
+        </Container>
+        <Container>
+          <Row>
+            <Col>
+              <Card.Subtitle className="text-center title">
+                Evolution
+              </Card.Subtitle>
+            </Col>
           </Row>
           <Row>
             <Col>
-        <hr />
-        </Col>
-        </Row>
-        <Row>
-        {details.species !== undefined ? (
+              <hr />
+            </Col>
+          </Row>
+          <Row>
+            {details.species !== undefined ? (
+              <Col>
+                <RenderEvolution
+                  evolutionChain={details.species.evolution_chain}
+                />
+              </Col>
+            ) : (
+              <Col>Loading</Col>
+            )}
+          </Row>
+          <Row>
             <Col>
-          <RenderEvolution evolutionChain={details.species.evolution_chain} />
-          </Col>
-        ) : (
-          <Col>Loading</Col>
-              )}
-              </Row>
-            <Row>
-                <Col>
-        <Card.Subtitle className="text-center title">Base Stats</Card.Subtitle>
-        </Col>
-        </Row>
-        <Row>
-        <Col>
-        <hr />
-        </Col>
-        </Row>
-        <Row>
+              <Card.Subtitle className="text-center title">
+                Base Stats
+              </Card.Subtitle>
+            </Col>
+          </Row>
+          <Row>
             <Col>
-        <ListGroup variant="flush" className="text-center">
-          {details.stats !== undefined
-            ? details.stats.map((stat) => {
-                return (
-                  <ListGroup.Item>
-                    <Container>
-                      <Row>
-                        <Col>{stat.stat.name}</Col>
-                        <Col>{stat.base_stat}</Col>
-                      </Row>
-                    </Container>
-                  </ListGroup.Item>
-                );
-              })
-            : null}
-        </ListGroup>
-        </Col>
-        </Row>
+              <hr />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <ListGroup variant="flush" className="text-center">
+                {details.stats !== undefined
+                  ? details.stats.map((stat) => {
+                      return (
+                        <ListGroup.Item>
+                          <Container>
+                            <Row>
+                              <Col>{stat.stat.name}</Col>
+                              <Col>{stat.base_stat}</Col>
+                            </Row>
+                          </Container>
+                        </ListGroup.Item>
+                      );
+                    })
+                  : null}
+              </ListGroup>
+            </Col>
+          </Row>
         </Container>
         <Container fluid>
           <Row>

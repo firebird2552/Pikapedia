@@ -19,7 +19,7 @@ import RenderEvolution from './RenderEvolutions'
 
 //functional react component
 const PokemonDetails = (props) => {
-console.log(props)
+    console.log(props)
     const [details, setDetails] = useState(props.details)
     const number = details.id
     console.log(details)
@@ -62,7 +62,7 @@ console.log(props)
 
             if (details.sprites !== undefined) {
                 if (details.sprites[name] !== null) {
-                    images.push(<Col className="col-12 col-md-3"><Card.Img src={details.sprites[name]} /></Col>)
+                    images.push(<Col key={details.sprites[name] } className="col-12 col-md-3"><Card.Img src={details.sprites[name]} /></Col>)
                 }
             }
             return 0
@@ -80,7 +80,7 @@ console.log(props)
             <Card.Body>
                 {details.types !== undefined ? details.types.map(({ type }) => {
                     return (
-                        <Col>
+                        <Col key={type}>
                             <Card.Subtitle className="text-center">{type.name.toUpperCase()}</Card.Subtitle>
                         </Col>
                     )
