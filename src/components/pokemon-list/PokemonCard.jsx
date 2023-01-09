@@ -68,7 +68,7 @@ export const PokemonCard = ({ loading, monsterDetails, monster }) => {
   if (!loading) {
     return (
       <NavLink
-        href={`./pokemon/${monster.name}$?number=${id}`}
+        href={`./pokemon/${monster.name}$?number=${id}`
         style={{ color: "inherit" }}
       >
         <Card key={id}>
