@@ -7,7 +7,6 @@ import { getVersions } from "../../../api/GetData";
 import { RenderMove } from "./RenderMove";
 
 const RenderMoves = ({ moves }) => {
-  console.log(moves)
   const [loading, setLoading] = useState(null);
   const [versionGroups, setVersionGroups] = useState([]);
 

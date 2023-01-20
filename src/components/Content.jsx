@@ -8,7 +8,6 @@ import { Switch, Route } from "react-router-dom";
 import PokemonList from "./pokemon-list/PokemonList";
 import PokemonDetails from "./details/PokemonDetails";
 import { MoveDetails } from "./details/moves/MoveDetails";
-import { AdComponent } from "./AdComponent";
 import { Footer } from "./Footer";
 
 //style imports
@@ -30,7 +29,6 @@ const Content = () => {
           <Route exact path="/move/:moveName" component={MoveDetails} />
           <Route exact path="/legal" component={legal} />
         </Switch>
-        <AdComponent />
       </div>
       <Footer />
     </div>

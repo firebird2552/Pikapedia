@@ -11,6 +11,8 @@ import Form from "react-bootstrap/Form";
 import { RenderMonster } from "./RenderMonster";
 import { getPokemon, getPokemonData } from "../../data/RetrievePokemon";
 
+import "../../styles/PokemonList.css";
+
 //functional react component
 const PokemonList = () => {
   const [pokemon, setPokemon] = useState({});

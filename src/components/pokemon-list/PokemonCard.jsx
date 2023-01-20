@@ -11,7 +11,6 @@ import { PokemonImage } from "./PokemonImage";
 
 export const PokemonCard = ({ loading, monsterDetails, monster }) => {
   const { id, types } = monsterDetails;
-  console.log(id, types);
   const [front_defualt, set_front_default] = useState("");
 
   useEffect(() => {

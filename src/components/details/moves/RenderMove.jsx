@@ -12,8 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretSquareDown } from "@fortawesome/free-regular-svg-icons";
 import { MoveGameDetails } from "./MoveGameDetails";
 
-export const RenderMove = ({ move, version_group_details}) => {
-  console.log(move)
+export const RenderMove = ({ move, version_group_details }) => {
   const moveUrl = move.url.split("/");
   const moveNumber = moveUrl[6];
   let moveDetails = [1, 2, 3, 4];
@@ -65,11 +64,14 @@ export const RenderMove = ({ move, version_group_details}) => {
                         }
                       </Col>
                     </Row>
-                  </ListGroup.Item> 
-                  {moveDetails.map(() => <MoveGameDetails move={move} 
-        version_group_details={version_group_details}/>)}
+                  </ListGroup.Item>
+                  {moveDetails.map(() => (
+                    <MoveGameDetails
+                      move={move}
+                      version_group_details={version_group_details}
+                    />
+                  ))}
                 </ListGroup>
-                
               </Card.Body>
             </Accordion.Collapse>
           </Card>

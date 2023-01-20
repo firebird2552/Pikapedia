@@ -100,8 +100,6 @@ const PokemonDetails = (props) => {
     return images;
   };
 
-  console.log(details);
-
   return (
     <Card>
       <Card.Header>
