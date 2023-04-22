@@ -1,4 +1,4 @@
-# Pokepedia
+# Pikapedia
 
 ## Purpose
 
