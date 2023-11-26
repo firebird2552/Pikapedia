@@ -1,7 +1,6 @@
 .footer {
   width: 100%;
   height: fit-content;
-  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

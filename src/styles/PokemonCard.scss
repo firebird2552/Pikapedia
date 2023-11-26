@@ -1,0 +1,50 @@
+.pokemon_card {
+  border-radius: 10px;
+  overflow: hidden;
+
+  .card_header {
+    display: flex;
+    flex-direction: column;
+    align-items: space-around;
+    justify-content: flex-start;
+    border: none;
+    h3 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: white
+    }
+    text-align: center;
+    .type_box {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      text-transform: uppercase;
+      p {
+
+        color: white;
+      }
+
+    }
+  }
+  .card_body {
+    width: 100%;
+    img {
+      width: 100%;
+    }
+    .card_stats {
+      margin: 1rem;
+      border: solid black 2px;
+      border-radius: 5px;
+      background-color: white;
+      .stat {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        display: flex;
+        justify-content: space-between;
+        padding: none;
+        margin: none;
+
+      }
+    }
+  }
+}
