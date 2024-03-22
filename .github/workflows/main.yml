@@ -32,8 +32,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npx webpack
-
+        run: npm run build
   deploy:
     name: Deploy to GoDaddy
     runs-on: ubuntu-latest
