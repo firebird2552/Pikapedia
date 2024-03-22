@@ -1,0 +1,14 @@
+stages:
+  - test
+  - deploy
+
+test:
+  stage: test
+  script:
+    - npm install  # Install dependencies
+    - npm test  # Run tests
+
+deploy:
+  stage: deploy
+  script:
+    - ssh tf5t3ny7mdk2@pikapedia.net "cd /home/tf5t3ny7mdk2/public_html && git pull origin master"
