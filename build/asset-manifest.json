@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.21ca22d3.css",
+    "main.js": "/static/js/main.aabb89c1.js",
+    "static/media/pikapedia.png": "/static/media/pikapedia.5918336a9666e14f3bf2.png",
+    "index.html": "/index.html",
+    "main.21ca22d3.css.map": "/static/css/main.21ca22d3.css.map",
+    "main.aabb89c1.js.map": "/static/js/main.aabb89c1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.21ca22d3.css",
+    "static/js/main.aabb89c1.js"
+  ]
+}

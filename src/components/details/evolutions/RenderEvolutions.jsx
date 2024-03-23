@@ -14,63 +14,60 @@ const RenderEvolution = ({ evolutionChain }) => {
   const [loading, setLoading] = useState(true);
   const [evolutionList, setEvolutionList] = useState({});
 
-  const GetEvolutions = async () => {
-    await axios.get(evolutionChain.url).then((response) => {
-      evolutionChain = { ...response.data };
-    });
-    await axios.get(evolutionChain.chain.species.url).then((response) => {
-      evolutionChain.chain.species = { ...response.data };
-    });
-    await axios
-      .get(
-        `https://pokeapi.co/api/v2/pokemon/${evolutionChain.chain.species.id}`
-      )
-      .then((response) => {
-        evolutionChain.chain.species = { ...response.data };
-      });
-    for (let i = 0; i < evolutionChain.chain.evolves_to.length; i++) {
-      let evolves_to = evolutionChain.chain.evolves_to[i];
-      await axios.get(evolves_to.species.url).then((response) => {
-        evolves_to.species = { ...response.data };
-      });
-      await axios
-        .get(`https://pokeapi.co/api/v2/pokemon/${evolves_to.species.id}`)
-        .then((response) => {
-          evolves_to.species = { ...response.data };
-        });
-      for (
-        let secondEvo = 0;
-        secondEvo < evolves_to.evolves_to.length;
-        secondEvo++
-      ) {
-        await axios
-          .get(evolves_to.evolves_to[secondEvo].species.url)
-          .then((response) => {
-            evolves_to.evolves_to[secondEvo].species = { ...response.data };
-          });
-        await axios
-          .get(
-            `https://pokeapi.co/api/v2/pokemon/${evolves_to.evolves_to[secondEvo].species.id}`
-          )
-          .then((response) => {
-            evolves_to.evolves_to[secondEvo].species = { ...response.data };
-          });
-      }
-
-      // Load all version groups then all versions
-    }
-
-    setEvolutionList(Object.assign(evolutionChain.chain, { isUpdated: true }));
-  };
-
+  
   useEffect(() => {
     if (loading) {
-      GetEvolutions();
+      const GetEvolutions = async () => {
+      await axios.get(evolutionChain.chain.species.url).then((response) => {
+        evolutionChain.chain.species = { ...response.data };
+      });
+      await axios
+        .get(
+          `https://pokeapi.co/api/v2/pokemon/${evolutionChain.chain.species.id}`
+        )
+        .then((response) => {
+          evolutionChain.chain.species = { ...response.data };
+        });
+      for (let i = 0; i < evolutionChain.chain.evolves_to.length; i++) {
+        let evolves_to = evolutionChain.chain.evolves_to[i];
+        await axios.get(evolves_to.species.url).then((response) => {
+          evolves_to.species = { ...response.data };
+        });
+        await axios
+          .get(`https://pokeapi.co/api/v2/pokemon/${evolves_to.species.id}`)
+          .then((response) => {
+            evolves_to.species = { ...response.data };
+          });
+        for (
+          let secondEvo = 0;
+          secondEvo < evolves_to.evolves_to.length;
+          secondEvo++
+        ) {
+          await axios
+            .get(evolves_to.evolves_to[secondEvo].species.url)
+            .then((response) => {
+              evolves_to.evolves_to[secondEvo].species = { ...response.data };
+            });
+          await axios
+            .get(
+              `https://pokeapi.co/api/v2/pokemon/${evolves_to.evolves_to[secondEvo].species.id}`
+            )
+            .then((response) => {
+              evolves_to.evolves_to[secondEvo].species = { ...response.data };
+            });
+        }
+  
+        // Load all version groups then all versions
+      }
+      setEvolutionList(Object.assign(evolutionChain.chain, { isUpdated: true }));
+    };
+    
+    GetEvolutions()
     }
     if (evolutionList.isUpdated) {
       setLoading(false);
     }
-  }, [evolutionList]);
+  }, [evolutionList, evolutionChain.chain, loading]);
 
   let evolutions = [];
 
@@ -101,7 +98,7 @@ const RenderEvolution = ({ evolutionChain }) => {
                 <Card.Subtitle className="text-center text-uppercase">
                   {evolvesTo.evolution_details[0].min_level !== null
                     ? evolvesTo.evolution_details[0].min_level
-                    : "" + " " + evolvesTo.species.name}
+                    : evolvesTo.species.name}
                 </Card.Subtitle>
               </Card.Header>
               <Card.Img src={evolvesTo.species.sprites.front_default} />
@@ -117,7 +114,7 @@ const RenderEvolution = ({ evolutionChain }) => {
                   <Card.Subtitle className="text-center text-uppercase">
                     {secondEvo.evolution_details[0].min_level !== null
                       ? secondEvo.evolution_details[0].min_level
-                      : "" + " " + secondEvo.species.name}
+                      :  secondEvo.species.name}
                   </Card.Subtitle>
                 </Card.Header>
                 <Card.Img src={secondEvo.species.sprites.front_default} />

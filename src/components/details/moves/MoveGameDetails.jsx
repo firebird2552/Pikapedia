@@ -4,14 +4,14 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
-import { getMoveDetails } from '../../../api/GetData'
+// import { getMoveDetails } from '../../../api/GetData'
 
 export const MoveGameDetails = ({ move,version_group_details}) => {
     useEffect(() => {
         const fetchData = async () => {
             console.log("Fetching Data")
 
-            let data = await getMoveDetails(move.url)
+            // let data = await getMoveDetails(move.url)
             
         }
         fetchData()

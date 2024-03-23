@@ -1,5 +1,5 @@
 // React imports
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 //Library imports
 import Container from "react-bootstrap/Container";
@@ -21,22 +21,19 @@ const PokemonList = () => {
   const [loading, setLoading] = useState(true);
   const [region, setRegion] = useState("Kanto");
 
-  const updatedDisplayedPokemon = () => {
+  const updatedDisplayedPokemon = useCallback(() => {
     if (searchKeyword.length !== 0) {
       let temp = null;
       for (let item in pokemon) {
-        //console.log("item", item)
         let found = pokemon[item].filter((monster) =>
           monster["name"].includes(searchKeyword.toLowerCase())
         );
-        //console.log("found", found)
         if (temp === null) {
           temp = found;
         } else {
-          temp.concat(found);
+          temp = temp.concat(found); // Use temp = temp.concat(found) instead of temp.concat(found)
         }
       }
-      //console.log("temp", temp)
       setDisplayedPokemon(temp);
     } else if (region !== "All Regions") {
       const selectedRegion = region.split(": ")[0];
@@ -44,7 +41,7 @@ const PokemonList = () => {
     } else {
       setDisplayedPokemon(pokemon);
     }
-  };
+  }, [searchKeyword, region, pokemon]);
 
   useEffect(() => {
     getPokemon().then(async (response) => {
@@ -73,7 +70,7 @@ const PokemonList = () => {
         `Pokemon not loaded\n pokemon length ${Object.keys(pokemon).length}`
       );
     }
-  }, [pokemon]);
+  }, [pokemon, updatedDisplayedPokemon]);
 
   useEffect(() => {
     const selected = document.querySelector("#generationSelect").value;
@@ -82,7 +79,7 @@ const PokemonList = () => {
 
   useEffect(() => {
     updatedDisplayedPokemon();
-  }, [searchKeyword, region]);
+  }, [searchKeyword, region, updatedDisplayedPokemon]);
 
   return (
     <Container fluid>
