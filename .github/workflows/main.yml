@@ -47,4 +47,4 @@ jobs:
 
       - name: Deploy to GoDaddy
         run: |
-          ssh tf5t3ny7mdk2@pikapedia.net "cd /home/tf5t3ny7mdk2/public_html && git pull origin main"
+          ssh -oHostKeyAlgorithms=+ssh-rsa tf5t3ny7mdk2@pikapedia.net "cd /home/tf5t3ny7mdk2/public_html && git pull origin main"
