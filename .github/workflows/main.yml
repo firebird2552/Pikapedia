@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -47,4 +47,4 @@ jobs:
 
       - name: Deploy to GoDaddy
         run: |
-          ssh tf5t3ny7mdk2@pikapedia.net "cd /home/tf5t3ny7mdk2/public_html && git pull origin main"
+          ssh -oHostKeyAlgorithms=+ssh-rsa tf5t3ny7mdk2@68.178.244.11 "cd /home/tf5t3ny7mdk2/public_html && git pull origin main"
